@@ -1,0 +1,2470 @@
+;-------------------------------------------------
+; eraTheWorld proto4.13用 藤原加式口上
+;-------------------------------------------------
+;
+;
+;試しに書いてみる藍様口上
+;人类に優しめで寛容なお人柄。でも実際は外面がいいだけで、結局は紫様＆橙が第一な感じを出したい
+;という訳で素質に”難以越過的底線”を追加。難易度急上昇
+;素質に”妖狐”が無かったので追加。問題あったら消します
+;式になる前から九尾の狐で、昔は色々やんちゃしてた系藍様
+;多分あんまり原作には沿ってません
+;もふるもふればもふるとき
+;
+;
+;※文体などについて
+;地の文は末尾に”。”を付けない方向
+;”――”はゲーム中だと線が途切れて見えるので不使用。一つだけだと物足りないし
+;”……”は二つ一組。個人的な見た目の好み
+;PRINTFORML を多用してクリック数削減。PRINTFORMWは段落の最後やイベントの長文などにのみ使用。スムーズに台詞が流れるように
+;うちの你はショタっ子だ。動物耳生えてる人外だ。いやいや種付けおじさんだ。などプレイヤーごとに色々あると思うので、性格や容姿を特定する表現はなるべく控えます
+;けど女性你だけは想定してません。申し訳ない
+;それと藍様処女プレイも対応しておりません
+;改変加筆修正いずれも歓迎
+;
+;
+;※其他について
+;霊夢口上、影狼口上、針妙丸口上、美鈴口上など皆様の構文を参考にさせて頂きました。礼物を申し上げます
+;当口上に加筆を考えて下さる方、被りなどはお気になさらずご自由にどうぞ。更新の際に文章をそのまま組み込ませて頂きます
+;(修改及交流请在贴吧或论坛进行、本人自认该口上并没有足够好到能够贩卖的程度)
+;(请不要将该口上用于商业用途等其他传播路径、请尊重原作者与二创的心血、谢谢大家)
+;尤其是贴吧里最近的那个eratw私服，神级控制，简直就是我******
+;(祝愿各位游玩开心)
+;
+;------ ｷﾘﾄﾘ ｶｲｼ -----------
+;eraTheWorld proto4.07パッチ取り込み用 Ver1.13
+;貂プレートの使い方
+;初めに置換指令等により K25 を K(角色No) に変更して下さい  
+;角色NoはCSVフォルダのCharaファイルを参照　例(霧雨 魔理沙の場合)：K25 =置換=> K11
+;
+;------ ｷﾘﾄﾘ ｵﾜﾘ -----------
+
+;**** Copyright ****************************************************************
+;本口上の修正について（許可する行為のみ残してください）
+;【誤字・脱字修正】【分岐条件・erb構文に関する修正】【本体Ver・Rev変更対応】【フラグの管理・修正】
+
+;本口上の加筆・改変について（許可する行為のみ残してください）
+;【未記入部位加筆】【随机分岐加筆】【記入済部位加筆】【記入済部位削除】【記入済部位コメントアウト】
+;本人藤原刺风由原版改版而来，加笔，改正随意，但要标明，本人参考了少女之梦，依姬，龙口上，在此向国人作者们致以崇高的敬意！
+;本口上に対する保养禁止時限について
+;【無】
+;******************************************************************************
+;**** FlagManagement **********************************************************
+;本口上にて使用しているCFLAG・TCVAR等
+;
+;CFLAG:25:1001	:胖次盗まれた回数
+;CFLAG:25:1002	:時間停止中に絶頂した合計回数
+;CFLAG:25:1003	:時間停止姦で陥落したかどうか
+;CFLAG:25:1004	:時間停止中に膣内射精された回数
+;CFLAG:25:1005	:约会後告白されたかどうか
+;CFLAG:25:1006	:お風呂場身体接觸で剃毛したかどうか
+;CFLAG:25:1007	:妊娠回数
+;TCVAR:25:350	:”部屋で遭遇”時に挨拶したか
+;TCVAR:25:351	:胖次を盗んだか
+;TCVAR:25:352	:選択肢付き会说着话か
+;TCVAR:25:353   :祈願制限
+;
+;******************************************************************************
+
+;PS 寅の人
+;原創作者と連絡が取れない場合、上記Copyrightに従い加筆改変を行って下さい
+;また本体処理・他口上処理等に干渉する異常処理がある場合で原創作者による修正が
+;行われない・もしくは困難な場合、Copyrightに関わらず有志による修正を許可します
+;その際は元処理を削除せずコメントアウトし修正処理を挿入して下さい
+
+
+;### 口上存在判定 ###################################
+@M_KOJO_K25(ARG)
+;別人版を作成する際はこの貂プレではなく別人版用口上貂プレをご利用ください
+
+;口上存在判定です、けしてコメントアウトしないでください
+;他の処理は一切行わないように
+RETURN 1
+
+;### 口上基本フラグ設定 #############################
+@M_KOJO_FLAGSETTING_K25
+;基本フラグ設定はここで行ってください
+;共通の口上フラグは必要な箇所のコメントアウトを外してご利用ください
+;口上専用フラグはご自由に
+;Xには角色番号を入れてください
+
+;眠姦口上有、時間停止口上有、扮演に1を入れると、それぞれ時間停止時、眠姦時、扮演時に指令口上が読み込まれるように
+;入れないと時間停止時、眠姦時、扮演時は一切喋りません
+;CFLAG:X:眠姦口上有 = 0
+;CFLAG:25:時間停止口上有 = 1
+;CFLAG:X:扮演口上有 = 0
+
+;破瓜中止口上有に1を入れると、@M_KOJO_EVENT_KX_LOST_VIRGIN_STOPで中止の成否を操作できます
+;CFLAG:X:破瓜中止口上有 = 0
+
+;口上内抱き寄せ判定_初回と口上内抱き寄せ判定_通常に1を入れると、M_KOJO_EVENT_KX_PERMISSIONで推倒の成否を操作できます
+;CFLAG:X:口上内抱き寄せ判定_初回 = 0
+;CFLAG:X:口上内抱き寄せ判定_通常 = 0
+
+;推倒禁止に1を入れると、主动推倒てこなくなります
+;以下は恋慕か炮友がつくまで推倒てこなくなる使用例
+;IF !TALENT:X:恋慕 && !TALENT:X:炮友
+;	CFLAG:X:推倒禁止 = 1
+;ELSE
+;	CFLAG:X:推倒禁止 = 0
+;ENDIF
+
+;来訪不能に1を入れると、来訪してこなくなります
+;以下は面識があるまで来訪してこなくなる使用例
+;IF !CFLAG:X:面識
+;	CFLAG:X:来訪不能 = 1
+;ELSE
+;	CFLAG:X:来訪不能 = 0
+;ENDIF
+
+;### 口上色判定 ###################################
+@M_KOJO_COLOR_K25
+;ここでSETCOLORすることで口上に色を付けられます
+
+;藍色にしてみたら大変読み辛かった。なので藤紫色
+SETCOLOR 0x9883C9
+
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+;"UPDATE判定"
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+@M_KOJO_UPDATE_K25
+;口上独自のUPDATE用
+;ENCOUNTER専用に独自分岐フラグを仕込んだ場合等にどうぞ
+;UPDATE判定でCFLAG等のキャラ変数を使う場合、キャラ番号の指定が必要になります
+PRINTFORMW
+$UPDATE
+PRINTFORMDL ———————————————【蓝大人的口上游玩指南】———————————————
+PRINTFORML
+PRINTFORML
+PRINTFORML  我是藤原公！第一次做口上，如有缺失，还望指正！
+PRINTFORML  欢迎阅读蓝大人的口上游玩指南
+PRINTFORML  本口上是第一个版本，而且如果没有重大变故我应该是会鸽了的。。。
+PRINTFORML  那么请问您有什么想了解的事情吗？
+PRINTFORMDL  
+PRINTFORMDL  
+PRINTFORMDL  [1] 这是什么？
+PRINTFORMDL  [2] 关于本口上
+PRINTFORMDL  [3] 我对于蓝大人的理解
+PRINTFORMDL  [4] 关于蓝大人病娇
+PRINTFORMDL  [5] 尤蓝。。。我的尤蓝。。。
+PRINTFORMDL  [6] 和蓝大人有深刻羁绊的角色
+PRINTFORMDL  
+PRINTFORMDL
+PRINTFORMDL  [0] 退出
+PRINTFORMDL
+PRINTFORMDL 
+$INPUT_UPDATE
+INPUT
+	IF RESULT == 1
+		PRINTFORML  如你所见这是蓝大人的口上游玩指南
+		PRINTFORML  由于本口上的作者看灵梦口上的文件好高级啊，于是就借鉴了一下。。。
+		PRINTFORML  所以就有了这份游玩指南的出现
+		PRINTFORML  如果没有游玩指南的话，想要体验所有的内容
+		PRINTFORML  嗯...没啥难度吧？我没那么的浴室狂，大概会借鉴原本的口上（借鉴少女之梦的口上的话你会感到很怪异的）
+		PRINTFORML  所以还请仔细阅读这一份指南啊
+		PRINTFORML  没有啥不容易触发的吧？
+		PRINTFORML  哦另外，有的地方写的有点沉重，但是没关系！蓝大人现在已经幸福的生活在幻想乡之中了
+		PRINTFORML  至于说具体内容嘛
+		PRINTFORML  还请您亲自体验
+		PRINTFORMW  祝您游玩愉快
+		GOTO UPDATE
+	ELSEIF RESULT == 2
+		PRINTFORML  （口上作者的寄语 节选自readme）<----（看到这个以后我才知道要写个readme）
+		PRINTFORML  本口上是看到之前的蓝口上写的太少了，而且意义不明，所以我决定，重做一份！
+		PRINTFORML  蓝大人在兽王园的形象大大的丰满了（致敬传奇饕餮厨かすがい，传奇紫黑头子zun）
+		PRINTFORML  有老人臭（不是）的紫大人怎么得到蓝大人的？
+		PRINTFORML  蓝大人和饕餮为何分开？又会在幻想乡摩擦出怎样的火花？
+		PRINTFORML  我特别喜欢有人妻属性的蓝和前任续火的故事，太棒了！
+		PRINTFORML  我尽量写的。。。额。。。没有那么突兀，至少你先生不会像是个牛头人
+		PRINTFORML  希望能让我笔下的蓝大人能够让各位喜欢！我和期待着有一天我的口上能被收录到蛇版资源中
+		PRINTFORML  到时候和别人玩的人说，你看这个，这个是我写的！
+		PRINTFORML  如果OOC了、请您原谅、毕竟是我的文笔问题、在这里先士下座……
+		PRINTFORMW  衷心祝愿各位、玩得开心
+		GOTO UPDATE
+	ELSEIF RESULT == 3
+		PRINTFORML  额。。。我理解的蓝大人不同于一般的妖兽
+		PRINTFORML  有人说蓝是逃出去的，我不同意
+		PRINTFORML  饕餮在对话中问的是“你现在已经叫八云蓝了吗？”
+		PRINTFORML  说明饕餮早就知道蓝要走，而且连下家都找好了，甚至蓝是自愿被编的式神
+		PRINTFORML  原作也没说饕餮和蓝具体啥关系，只是关系不是一般的好，可以欺骗紫大人的那种程度
+		PRINTFORMW  蓝为什么要走？蓝有什么信念？原作统统没说
+		PRINTFORMW  但是嘛，我就设定为：饕餮自己把蓝惹走了，蓝不喜欢畜生界，但有重塑畜生界的信念
+		PRINTFORML  饕餮原作中是很聪明的，但是为了自己的前任，我们就让她在蓝大人面前降智999点吧！
+		GOTO UPDATE
+		ELSEIF RESULT == 4
+		PRINTFORML  （吐槽一句，截止今天，2024-12月9日，东方病娇中没有蓝大人的故事有点遗憾）
+		PRINTFORML  本文会参考灵梦和依姬的口上来做
+		PRINTFORML  而要触发本口上的病娇的差分
+		PRINTFORML  首先你需要和蓝大人在恋慕关系时出轨（恋人关系时无所谓）
+		PRINTFORML  其次就是要让蓝感到焦躁和不安
+		PRINTFORML  也就是指花心被抓了现行
+		PRINTFORML  蓝大人专业对口，理解你的花心，但是由于式的影响，蓝大人会很珍惜眼前的事物的
+		PRINTFORML  蓝大人能够一次两次的原谅你的花心
+		PRINTFORML  如果你不断的挑战九尾狐的底线的话————
+		PRINTFORMW  你就是饕餮本人？蓝大人会狠狠的惩罚你的！用式神的能力！
+		PRINTFORML  紫大人：你先生？（无慈悲）
+		GOTO UPDATE
+		ELSEIF RESULT == 5
+		PRINTFORML  啊啊啊啊！传奇油魔厨！还有政长甚至也去画油魔和蓝了！
+		PRINTFORML  zun又在一步步消弱紫的重要性，血池地狱是摩多罗干的事
+		PRINTFORML  兽王园里紫妈的经典老人流口水
+		PRINTFORML  蓝不是紫从小带大的，还敢骗自己的主人
+		PRINTFORML  本人就特别喜欢油魔和蓝，时刻想着油魔把紫给扬了之类的
+		PRINTFORML  （另外我也喜欢右鹭妈妈，以及一切的母女组。本人会试着加笔，敬请期待）
+		PRINTFORMW  所以不会着重描写蓝和紫的主仆关系，蓝和橙的关系就更少了，和饕餮的关系请相信
+		PRINTFORMW  毕竟，蓝大人的初恋就是她呢。。。（可能是因为我没谈过恋爱吧，不知道这种感觉）
+		GOTO UPDATE
+		ELSEIF RESULT == 6
+		PRINTFORML  蓝大人是紫大人的式神，处理过大量的公务（尤其是冬天）
+		PRINTFORML  但是其中一些角色和蓝有着比较深的羁绊
+		PRINTFORML  也正是因为这一份羁绊的存在
+		PRINTFORML  让少女（存疑）之间感情纠葛变得麻烦了
+		PRINTFORML  不妨多与那些同蓝有深刻羁绊的少女交流
+		PRINTFORML  比如饕餮啊，紫啊，橙啊，甚至紫的公务员灵梦，要处理的大天狗龙，同为狐狸的纯狐之类的
+		PRINTFORML  敬请期待，血流成河！
+		PRINTFORMW  有趣，我就要看这个啊！
+		GOTO UPDATE
+		ELSEIF RESULT == 0
+		PRINTFORMW  祝你玩的开心    虽然不开心我也没办法就是了（笑）
+	ENDIF		
+RETURN 1
+
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+;"ENCOUNTER"系イベント（エクストラ構文）
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+@M_KOJO_ENCOUNTER_K25
+;初対面、挨拶のタイミング
+;TALENTの変更はここでどうぞ。
+PRINTL 
+PRINTFORMW 「你好！新来的客人？」
+PRINTL 
+PRINTFORMW 正思考些事情，被突然冒出的言語嚇一跳
+PRINTFORMW 你回头向后望去
+PRINTFORMW 一位金色短发的美丽女子側著臉感興趣的朝我望著
+PRINTFORMW 这位美女身上有种幽静的森林的香味，她的气质很古朴典雅，但眼睛里有种莫名的悲伤
+PRINTFORMW 她的背後有九個金色豔麗的巨大尾巴
+PRINTFORMW 好像上去摸一摸啊。。。尾巴保养的真好呢
+PRINTFORMW 身上的袍子掩盖不住身体的丰满，狐妖的骄傲的身材显露无疑
+PRINTL 
+PRINTFORMW 「突然開口嚇到你了嗎？抱歉呢」
+PRINTFORMW 「我是八雲藍，身份乃侍奉某位大人的式神」
+PRINTFORMW 「這樣說起來、今後也請多多關照」
+PRINTL 
+PRINTFORMW 這樣說著的九尾狐狸，有禮貌的低下了頭
+PRINTFORMW 唉呀，唉呀。跟冷豔的美貌及存在感相反，感覺是個非常好親近的妖兽……
+PRINTFORMW 我也禮貌的回禮
+PRINTFORMW 「哈拉，那么，如果日后人间之里有什么问题的话，欢迎向我报告呢」
+PRINTFORMW 「毕竟，这里可是我和那位大人的心血所在啊」
+PRINTL 
+PRINTFORML 「那么……你觉得在这里生活怎么样呢？」
+		PRINTBUTTON "[托贤者们日益治理的福气，现在这里非常好，吃穿用住一应俱全，四境太平，今日有幸拜见，不胜喜悦]", "0"
+        PRINTL
+		PRINTBUTTON "[我希望大人您和我们睿明的管理者们也能如此的幸福呢，我也希望除了人类，妖怪，妖兽也能和睦相处呢]", "1"
+		INPUTS
+		SELECTCASE RESULTS
+			CASE "0"
+				PRINTFORML 「阿拉，小嘴真甜呢」
+				PRINTFORML 从九尾狐身上感受到了巨大了灵力，这样还是不要嘴欠的好
+				PRINTFORML 「四境太平到谈不上，天狗们总是闹事。。。」
+				PRINTFORML 阿拉，这一定是一份很辛苦的工作吧？您辛苦了，同时向您的主人致敬
+				PRINTFORML 「像你这样的会说话的真是叫人没有办法」
+				PRINTFORML 「唔、诺，妖怪之山的晚上最好不要去呢，有天狗的袭击」
+				PRINTFORML 「还有，切记晚上锁门哦，要防止意外呢」
+				PRINTFORML （唔姆，这孩子真的聪明伶利呢？真是叫人喜欢）
+				PRINTFORML 「放心啦、虽然妖怪什么的不少、但待在这里还是很安全的」
+				PRINTFORMW 来到这个世界的你选择牢记蓝大人的叮嘱
+				PRINTFORMW 以后在幻想乡有什么情况就和蓝大人说下吧
+				CFLAG:1:好感度 += 40
+     		CFLAG:1:信賴度 += 20
+			CASE "1"
+				PRINTFORML 「唔、这个角度好新奇。。。」
+				PRINTFORML 「那样的话、我，我也希望呢」
+				PRINTFORML 蓝大人仰起头来，撇了一眼天界，又低下头，望着土地发呆
+				PRINTFORML 「好啦好啦、我也希望呢，你这孩子倒是很有正义感呢」
+				PRINTFORMDW 「畜生们也能如此幸福？还有那时候的她。。。」
+				PRINTFORML 「好了小伙子，我欣赏并赞美你的精神，我称之为——黄金精神」
+				PRINTFORMDW 蓝大人慈祥的微笑着摸了摸你的头，身后的尾巴止不住的动了动，活灵活现的。
+				PRINTFORML 「你要是日后有这样的机会的话，还请多多努力哦？我一直都会是你坚强的后盾呢」
+				PRINTFORMW 「嘛、话说回来、努力在幻想乡里生活下去吧」
+				CFLAG:1:好感度 += 100
+     		CFLAG:1:信賴度 += 40
+		ENDSELECT
+;妖狐
+TALENT:25:25 = 1
+TALENT:25:91 = 1
+RETURN 1
+
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+;"SP_EVENT"系イベント
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+;==================================================
+;デート帰りにファーストKISS（合意も付く）
+;==================================================
+@M_KOJO_SPEVENT_K25_1(ARG,ARG:1)
+;口上主はTARGET
+;地の文表示
+CALL SPEVENT_MESSAGE_1(ARG,ARG:1)
+;--------------------------------------------------
+;記入チェック（=0, 非表示、1, 表示）
+LOCAL = 1
+;-------------
+IF LOCAL
+	PRINTFORMW 
+	PRINTFORMW 「%CALLNAME:MASTER%？」
+	PRINTFORMW 听到了蓝大人的呼唤、走在前面的%CALLNAME:MASTER%看向蓝大人。
+	PRINTFORMW 此时天已经黄昏，晚霞烧红了幻想乡的天，扎染了妖怪之山的瀑布，透过魔法森林的层层雾霭，光芒万丈，让人感觉一股淡淡的热烈
+	PRINTFORMW 你看向蓝大人的脸。蓝大人正对你微笑着。
+	PRINTFORMW 金色的瞳孔和金色的黄昏辉映，连金色的发丝也被抹上金色的黄昏，你感受到了无限的美好
+	PRINTFORMW 蓝大人金色的尾巴竖起来，如同孔雀一样，而一身金色的蓝大人就是圣洁的孔雀女王一般
+	PRINTFORMW %CALLNAME:MASTER%感叹道蓝大人太美了。
+	PRINTFORMW 女王陛下你好美。。。
+	PRINTFORMW 「从我们的第一天见面你就这么会说话。。。」
+	PRINTFORMW 蓝大人牵起你的手
+	PRINTFORMW 「我……喜欢你……」
+	PRINTFORMW %CALLNAME:MASTER%刚想说些什么、嘴唇就被一阵柔软包裹
+	PRINTFORMW 蓝大人的舌头轻而易举的突破了%CALLNAME:MASTER%的防线，深深的伸到里面。
+	PRINTFORMW 「唔……」
+	PRINTFORMW 你闭上眼睛，静心感受着蓝大人的味道，和蓝大人的香味。
+	PRINTFORMW 舌头伸了出来，唾液被拉了出来
+	PRINTFORMW 「此时此刻，我只想拥有你……王权富贵，玉律金规，三千世界，你就是我的菩提树。。。」
+	PRINTFORMW 我。。。
+	PRINTFORMW 你还没来得及说什么，蓝大人就又贴了上来
+	PRINTFORMW 「%CALLNAME:MASTER%，呆子……唔……」
+	PRINTFORMW 你失神的感受着，黄昏散发出滚烫的热烈、%CALLNAME:MASTER%此时只看到了属于蓝大人的金色。。。
+	PRINTFORMW 你能停止时间，但此时的你绞尽脑汁的感受着，想要留住这一刻的美好，但是你却无法留住时间。
+	PRINTFORMW 时间一分一秒的过去，你知道终有一刻会终结，但你却无法留住时间
+	PRINTFORMW 蓝大人松开了你，你想要再多看看蓝大人，但你知道，蓝大人就要离开了，你却无法留住时间。
+	PRINTFORMW 「再见。。。%CALLNAME:MASTER%」
+	PRINTFORMW 你鼻子酸酸的，蓝大人终究还是离开了你。你能明白为什么那些王侯将相的千金一掷，换来莞尔一笑。
+	PRINTFORMW 蓝大人，再见。。。
+	;接吻を中止したい場合は以下を開放
+	;TCVAR:中止接吻 = 1
+ENDIF
+RETURN 1
+
+;==================================================
+;デート帰りに告白（恋人が付く）
+;==================================================
+@M_KOJO_SPEVENT_K25_2(ARG,ARG:1)
+;口上主はTARGET
+;地の文表示
+CALL SPEVENT_MESSAGE_2(ARG,ARG:1)
+;--------------------------------------------------
+;記入チェック（=0, 非表示、1, 表示）
+LOCAL = 1
+;-------------
+IF LOCAL
+	;-------------------------------------------------
+	;小分岐
+	;-------------------------------------------------
+	;告白内容
+	;この告白内容表示後に受けるかどうかの選択分が表示されます
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 0
+	IF FIRSTTIME(1025)
+		PRINTFORML
+		PRINTFORMDL 「今天的天空比较明亮呢——蓝大人怎么了？」
+		PRINTFORMDL 蓝大人在归途中一直在闻着你的气味，脸 红红的止不住的看着你
+		PRINTFORMW %CALLNAME:MASTER%和蓝大人之间的羁绊越发的深沉，协助蓝大人的实验，给蓝大人跑腿
+		PRINTFORML 但%CALLNAME:MASTER%也发现、蓝大人最近特别的喜欢粘上你不放，摸头，贴近，十分的亲密
+		PRINTFORML 蓝大人？
+		PRINTFORMW 虚幻的声音响起、望像蓝的表情
+		PRINTFORMW 一瞬间，她的身影消失了
+		PRINTL
+		PRINTFORMW 正惊讶之时。突然身体被紧紧抱住
+		PRINTFORMW 九条美丽的尾巴跟双手、从背后紧紧的纠缠
+		PRINTFORMDW 
+		PRINTFORML 「你知道吗？在我还不是式神的时候，曾经和很多男人有过接触。民脂民膏的供奉，三拜九叩的礼节，一言九鼎的权威」
+		PRINTFORMDL 
+		PRINTFORML 「我是他们争相拜见的美人，也许只需要一笑，就会引得那些油头肥面的男人不知所措，竭尽全力来追捧我」
+		PRINTFORML 「有的时候，我很羡慕饕餮没见过这些东西。今天还在和你说话，讲他的抱负，明天就身首异处。。。有人弹冠相庆，歌舞升平，有人哭倒在殿堂，不知所措」
+		PRINTFORMW 蓝大人？
+		PRINTFORMW 蓝大人摸着你的头，眼睛里充满了悲愤
+		PRINTFORMDW 
+		PRINTFORML 「更主要的是我对一些国家的伤害。。。印度华阳天，商殷苏妲己，本州玉藻前，我在人间的名声太差了」
+		PRINTFORMDL 
+		PRINTFORML 「我搞的国破身死，君臣相顾皆掩面，朝歌大火的余光我无法忘记。。。」
+		PRINTFORML 蓝大人的眼角有泪光，她看向你。
+		PRINTFORML 我不想再经历这一切了。。。
+		PRINTFORML 「那么，%CALLNAME:MASTER%？到了幻想乡之后，你还是我第一个如此心动的人呢」
+		PRINTFORML 「我喜欢你！」
+		PRINTFORML 「%CALLNAME:MASTER%，你能够和我在一起吗？我想要一个安稳的生活，想要体验平凡的故事，想要陪你再看夕阳，想要看到你的一生！我会守在你的坟前！想要干很多事情！」
+		PRINTFORML 「%CALLNAME:MASTER%？你能否接受这样过去的我？能否和我在一起？」
+		PRINTFORML 「求你了。。。」
+	ELSE
+		PRINTFORML 「话说，%CALLNAME:MASTER%？」
+		PRINTFORML 蓝大人叫住了你
+		PRINTFORML 「%CALLNAME:MASTER%你，有没有回心转意？」
+		PRINTFORML 「我还是想要和你在一起。」
+		PRINTFORML 「也许你认为我只是贪图什么的话，那么你错了。」
+		PRINTFORML 「现在的我，以及过去的我，都渴望着一个真心实意对我好的人啊。」
+		PRINTFORML 「我想要不只想要我的肉体的，我的精神伴侣。。。」
+		PRINTFORML 「%CALLNAME:MASTER%，你的信念打动了我，你可以陪我走到远方！」
+		PRINTFORML 「我想拥有你！你的能力！你的智谋！你的能力！你好坏，竟然让一只狐妖爱上了你。。。」
+		PRINTFORML 「%CALLNAME:MASTER%？求你了，我不会干预你的自由，我知道你的内心，我现在只想知道，我究竟在不在你的心里？」
+	ENDIF
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;告白オッケー（恋人が付く）
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 1
+		PRINTFORML
+		PRINTFORML 「%CALLNAME:MASTER%答应了我吗？」
+		PRINTFORMW 「笨蛋！竟然让一只母狐狸这么的。。。」
+		PRINTFORML 蓝大人把你抱紧在了尾巴里，你觉得好紧啊
+		PRINTFORML 「%CALLNAME:MASTER%……」
+		PRINTFORMW 蓝大的身体颤抖着
+		PRINTFORML 「我不会放弃你的」
+		PRINTFORML 「这次我要，你和永不分离……」
+		PRINTFORML 「我不想看到满天山火，尸骨露野。。。不要再经历分别了。。。」
+		PRINTFORML 「我是……九尾的式神……我会守护你。。。」
+		PRINTFORML  蓝大人再次的勒紧了你，你知道，这是爱人的身体，要好好享受。
+		PRINTFORML 「上耶啊上耶～」
+		PRINTFORMW 「山无陵啊～天地合～」
+		PRINTFORML 「冬雷阵阵兮！夏雨雪～」
+		PRINTFORML 「乃敢与君绝～」
+		PRINTFORML 「我却不敢与君绝！！～」
+		PRINTFORML 山涧清泉映蓝影，流水潺潺和狐音。水声潺潺伴奏曲，狐音悠扬入我心。此曲只应此处有，天月安知我之情？九尾狐仙蓝之韵，流传绵延朝天鸣。
+		PRINTFORML 「%CALLNAME:MASTER%，谢谢你，谢谢。。。」
+		PRINTFORMW
+		PRINTFORMW %CALLNAME:MASTER%从蓝大人的尾巴里扭来扭去，探出一个头来，看向蓝大人
+		PRINTFORML 蓝大人把你举到身下，微笑的摸着你的脸。
+		PRINTFORMW 突然，蓝大人向你吻去，你闭上眼睛，感受着这一刻的美好。
+		PRINTFORML
+		PRINTFORMW 与蓝大人保持了许久拥抱的姿势
+		PRINTFORML 你在蓝大人的怀里，感受着蓝大人的身体的丰腴柔软，
+		PRINTFORML 你也想为蓝大人做些什么。
+		PRINTFORMW 蓝大人？
+		PRINTFORML 「%CALLNAME:MASTER%？」
+		PRINTFORML %CALLNAME:MASTER%的眼神坚毅的温柔，你也想要引吭高歌。
+		PRINTFORML 蓝大人！臣乃泡茶扫地付丧神，不善言辞（其实要看教养）！我也想给您唱首歌！
+		PRINTFORML 「我来给你和音？如何？」
+		PRINTFORML 就像每一个青年一样，你也会遇见那个姑娘！「青春似锦，年华如画；征途遇卿，笑靥如花。 」
+		PRINTFORML 她将和你奔往远方！勇敢穿过风和浪！「与你共渡，江湖烟波；不畏浪涛千—丈—高！」
+		PRINTFORML 听风雪喧嚷，看流星在飞翔；「风雪喧嚣——流星在飞翔——」
+		PRINTFORML 我的心向我呼唤：奔向动荡的远方！「我们的信条一样：奔向动荡的远方！」
+		PRINTFORML 你只觉得心情无比的舒畅。
+		PRINTFORML 「%CALLNAME:MASTER%？我们也有这样的远方呢。。。」
+		PRINTFORMW 「你……也要陪我奔向动荡的畜生界哦？」
+		PRINTFORMW 「人类和狐狸，这种故事，是可以写进聊斋里面的呢～」
+		PRINTFORML 「那么……让我的余生与你余生」
+		PRINTFORML 「纠缠在一起吧……」
+		PRINTFORML  蓝大人吻向%CALLNAME:MASTER%。。。
+		PRINTFORMW 
+		CFLAG:345 = 1
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;告白失敗
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 2
+		PRINTFORML
+		PRINTFORMW 「%CALLNAME:MASTER%？这就是你的答案吗？」
+		PRINTFORMW 「你为什么要拒绝我啊？为什么。。。」
+		PRINTFORMW 「对不起……明明我是九尾狐。。。却连你的芳心都俘获不了吗？」
+		PRINTL
+		PRINTFORMW 如果不喜欢的话也没办法
+		PRINTFORMW 虽然有所觉悟、但还是有点想逃避
+		PRINTFORMW “哈哈…、是吗…”
+		PRINTFORMW “我不会放弃…”
+		PRINTFORMW “总有一天一定会让你点头。魅惑什么的是妖狐最拿手的”
+		PRINTL
+		PRINTFORMW 蓝带著挑衅的微笑。被纵长的瞳孔锐利的盯著
+		PRINTFORMW 好吧，看来事到如今
+		PRINTFORMW 意外的让对方认真了……
+		PRINTW
+		RETURN 1
+	ENDIF
+ENDIF
+RETURN 1
+
+;==================================================
+;约会帰り
+;==================================================
+@M_KOJO_SPEVENT_K25_3(ARG,ARG:1)
+;口上主はTARGET
+;地の文表示
+CALL SPEVENT_MESSAGE_3(ARG,ARG:1)
+;--------------------------------------------------
+;記入チェック（=0, 非表示、1, 表示）
+LOCAL = 1
+;-------------
+IF LOCAL
+	;-------------------------------------------------
+	;小分岐
+	;-------------------------------------------------
+	;通常帰宅
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 0
+		IF TCVAR:媚薬 || TCVAR:発情 || CFLAG:TARGET:积攒度 > 850
+				IF TALENT:恋人
+					SELECTCASE RAND:2
+						 CASE 1
+						 PRINTFORML 「呐、%MASTERNAME:1%……♥」
+						 PRINTFORML 蓝大人叫住了%CALLNAME:MASTER%，并且抱住了你。
+						 PRINTFORML 「嗯……好香啊……」
+						 PRINTFORML 蓝大人向%CALLNAME:MASTER%的耳朵里面吹气，这突然的举动让失声叫了出来
+						 PRINTFORML %CALLNAME:MASTER%感觉身上痒痒的，但是祸不单行，刚想要离开，蓝大人就向你的脖子舔去。
+						 PRINTFORML 「。。。我已经想要了。。。」
+						 PRINTFORML 温热的喘息萦绕在脖子周围、身下已经被蓝大人弄的挺直了
+						 PRINTFORML 「呵呵……已经不行了吧♥」
+						 PRINTFORML 蓝大人娴熟的操弄着你的小弟弟，这样的挑逗你简直受不了，连连向蓝大人苦声求饶
+						 PRINTFORML 「这可不行呢，临回去了，你不好好补偿补偿我吗？」
+						 PRINTFORMW 「都怪你在约会的时候挑弄我，那样摸我，现在我的身体好热，都怪你！诺！去那里，接受惩罚吧，让你感受下九尾狐的威力！」
+						 PRINTFORMW 蓝大人很温柔呢，没有太把你吃干净，还让你留了一口气回到家里。
+						 EXP:25:精液経験 += 2
+						 EXP:25:膣射経験 += 2
+						 EXP:25:Ｖ性交経験 += 2
+						 EXP:25:絶頂経験 += 2
+						 EXP:MASTER:絶頂経験 += 2
+						 EXP:MASTER:射精経験 += 2
+						 EXP:MASTER:挿入経験 += 2
+						 CASE 0
+						 PRINTFORML
+						 PRINTFORML 蓝大人在快要到达目的地的时候，蓝大人突然抱住了你，你可以感受到蓝的乳头已经硬了
+						 PRINTFORML 「%CALLNAME:MASTER%，你这个坏蛋，把我的身体搞成这个样子。。。」
+						 PRINTFORML 「我已经忍不住了。。。在这里把你剧情杀了！」
+						 PRINTFORML 蓝大人把你抱到一边没有人的树林里撂倒，坐在了你的身上。
+						 PRINTFORML 你可以看到蓝大人的乳房把衣服撑了起来，蓝二话没说，熟练的脱掉了她的衣服，乳房一跳一跳的，很是活跃
+						 PRINTFORML 「%CALLNAME:MASTER%？你现在可以求饶了，现在的你，感觉怎么样啊？」
+						 PRINTFORML 没等你回答“紫大人，救我啊”，蓝堵上了你的嘴，一直在你的嘴里横冲直撞。
+						 PRINTFORML 「%CALLNAME:MASTER%，还不够哦？」
+						 PRINTFORML 诶？你说什么？难道这些还不够吗
+						 PRINTFORML 「你在说什么啊？此时此刻，你不会在开玩笑吧？」
+						 PRINTFORML 蓝大人用股间摩擦着你那早已经拥肿不堪的小弟弟
+						 PRINTFORMW 「嗯，嗯，还差一点。。。现在你做好觉悟吧？这是连帝王都没能感受到的快感呢」
+						 PRINTFORMW 蓝大人现在开始捕猎你。
+						 PRINTFORMW 「啊……好棒♥……就是那里……呜呜……好舒服……要坏掉了啊……」
+						 PRINTFORMW 「%CALLNAME:MASTER%一直在吸我的欧派，你是欧派星人吗?唔。。。不要。。伊！坏孩子就应该惩罚，看我的！」
+						 PRINTFORML 一直做到了蓝大人满意，这只凶猛的狮子才宣告捕猎完毕，从你的身上退了下来。
+						 PRINTFORML 「%CALLNAME:MASTER%，明天，再会哦？」
+						 EXP:25:精液経験 += 2
+						 EXP:25:膣射経験 += 2
+						 EXP:25:Ｖ性交経験 += 2
+						 EXP:25:絶頂経験 += 2
+						 EXP:MASTER:絶頂経験 += 2
+						 EXP:MASTER:射精経験 += 2
+						 EXP:MASTER:挿入経験 += 2
+					ENDSELECT
+				ELSEIF TALENT:恋慕
+					 PRINTFORML
+					 PRINTFORML 「%CALLNAME:MASTER%?你过来一下？」
+					 PRINTFORML 可以说是无知者无畏，你向着眼睛里冒爱心的蓝大人走去
+					 PRINTFORML 「过来过来？真乖！」
+					 PRINTFORML %CALLNAME:MASTER%瘫倒在蓝大人丰满的胸脯上
+					 PRINTFORML 蓝大人的身体好热，还在不断的向你吐气，你感到了十分的热气。
+					 PRINTFORML 「呐、%CALLNAME:MASTER%……%CALLNAME:MASTER%想感受一下我吗？」
+					 PRINTFORML %CALLNAME:MASTER%的手被蓝大人贴到了欧派上，你抚摸着发硬的前端和柔软的乳白
+					 PRINTFORML 「%CALLNAME:MASTER%？你想要做了吗？」
+					 PRINTFORML 「要是还不想的话，看招！」
+					 PRINTFORML 蓝大人对你下面的帐篷抚摸着，把玩着，你顿觉不妙。
+					 PRINTFORMW 「%CALLNAME:MASTER%？来做吧？满足了我之后再回去嘛～」
+					 EXP:25:精液経験 += 2
+					 EXP:25:膣射経験 += 2
+					 EXP:25:Ｖ性交経験 += 2
+					 EXP:25:絶頂経験 += 2
+					 EXP:MASTER:絶頂経験 += 2
+					 EXP:MASTER:射精経験 += 2
+					 EXP:MASTER:挿入経験 += 2
+				ELSEIF TALENT:愛欲
+					 PRINTFORML 你发现了蓝大人潮红的脸，止不住看向你的眼神，顿时觉得想要做了，你把手向蓝大人摸去。。。
+					 PRINTFORML 「死变态！到了幻想乡之后给我好好的做人啊！」
+					 PRINTFORML 蓝大人的尾巴炸毛了，恶狠狠的盯着你，虽然眼睛里满是责备，但是没有打开你的手。
+					 PRINTFORML 蓝大人进入发情期了嘛～
+					 PRINTFORML 「才没有！那种乳臭未干的小妖怪才有的溴事。。。」
+					 PRINTFORML 蓝大人也是很年轻嘛～别这么说自己嘛，在我的心中，蓝大人最漂亮，最年轻了！
+					 PRINTFORML 「呜呜呜——你总是说这些好话。。。靠近狐狸可是很危险的哦？」
+					 PRINTFORML 你知道这是蓝大人基本已经同意了，于是越发肆无忌惮起来
+					 PRINTFORML 蓝大人指了指远处的一间破旧房屋，你心领神会的牵起蓝大人的手。
+					 EXP:25:精液経験 += 2
+					 EXP:25:膣射経験 += 2
+					 EXP:25:Ｖ性交経験 += 2
+					 EXP:25:絶頂経験 += 2
+					 EXP:MASTER:絶頂経験 += 2
+					 EXP:MASTER:射精経験 += 2
+					 EXP:MASTER:挿入経験 += 2
+					ENDIF
+				ENDIF
+		ELSEIF TALENT:恋人
+			SELECTCASE RAND:4
+			CASE 0
+				PRINTFORML 「啊，今天一天就结束了，谢谢你」
+				PRINTFORMW 蓝大人用尾巴抱住了你
+				PRINTFORML 好想时间定格在这一刻啊。。。
+				PRINTFORML 「那么，明天再会啰？」
+			CASE 1
+				PRINTFORML 「美好的时光总是短暂的。。。可是我还要做我的家务呢。。。」
+				PRINTFORML 蓝大人拉住了你的手，依依不舍的轻柔的抚摸着
+				PRINTFORML 「那么，再见。。。」
+				PRINTFORMW 你痛恨自己为什么不能时停到八云宅里变身扫地泡茶付丧神后和蓝大人贴贴
+			CASE 2
+				PRINTFORML 「今天一天都是很愉快的呢。。。」
+				PRINTFORML 「…我心伤悲，莫知我哀…」
+				PRINTFORML 「明天，也要陪我在一起哦？」
+				PRINTFORML 蓝大人深情的吻了你
+				PRINTFORMW 「实在不想和你分开，想要再看看你。。。」
+				PRINTFORML 亲爱的蓝大人啊，我又何尝不是呢？
+			CASE 3
+				PRINTFORML 「虽说这里已经快要快要分离了，但是」
+				PRINTFORML 「你是不是在半路的时候偷看那孩子好久了？哈？你还问我哪个？你以为身为狐妖的我会看不出来吗？」
+				PRINTFORML 啊失算了，蓝大人早就已经知道我觉得她好看了！
+				PRINTFORML 可是蓝大人却扑哧的笑了出来。
+				PRINTFORML 「好了好了，看你慌张的！就和她一样……（小声）。那孩子也是个好孩子呢，要善待她哦？」
+				PRINTFORMW 「明天也要和我见面哦？我来亲自教你怎么俘获她的心……」
+			ENDSELECT
+		ELSEIF TALENT:恋慕
+			SELECTCASE RAND:3
+			CASE 0
+				PRINTFORML 「%CALLNAME:MASTER%，今天你玩的开心吗？」
+				PRINTFORML %CALLNAME:MASTER%點了點頭、像妻子般的藍溫柔的笑著
+				PRINTFORML 「那么……、明天我就要去工作了，我们还能再见面吗？」
+				PRINTFORML 你知道这是蓝大人在请求你给她工作的时候也来陪她
+				PRINTFORML 当然，蓝大人抽出这么宝贵的休息时间来陪我，我一定要回报的
+				PRINTFORML 「那么，我们明天再见。。。」
+				PRINTFORMW 一定哟，蓝大人？无论是工作还是休闲，我们都可以在一起的！
+			CASE 1
+				PRINTFORML 蓝大人轻挽着的胳膊，眼中流露出不舍的光芒。
+				PRINTFORML 「亲爱的，今日的时光过得真快，转眼便到了分别的时刻。」
+				PRINTFORML 「论你在何处，我的心都会陪伴在你身边。」
+				PRINTFORML 你的笑容是我最美好的回忆。愿蓝大人安然，我在幻想乡的每一个日出日落，都会期待与你再见面的那一天。
+				PRINTFORMW 十指緊扣著、嫻靜的氣氛讓人覺得甜蜜
+			CASE 2
+				PRINTFORML 「下次在迷途之家度過一天如何。晚了就住在下來就好了」
+				PRINTFORML 「到时候可不准因为我喝醉了酒容易推倒你就对我动手动脚哦？」
+				PRINTFORMW 这不就是希望动手动脚吗？
+			ENDSELECT
+		ELSEIF TALENT:思慕
+			SELECTCASE RAND:2
+			CASE 0
+				PRINTFORML 「阳光斜斜地洒在我们身上，这下午的时光，就像一首没唱完的歌，让人舍不得结束呢。」
+				PRINTFORML 蓝大人您还满意吗？世界上，总有些美好是短暂的，就像我们的相遇，像这午后的阳光，温暖却不能永恒。
+				PRINTFORMW 「每一次拥抱都有松开的时候，每一次相遇都有分别的瞬间。哎，可惜生活苦短啊。。。」
+			CASE 1
+				PRINTFORML %CALLNAME:MASTER%邀请蓝下次去看星星
+				PRINTFORML 「星星吗？嗯。。。让我用式神的能力查一下。。。看我的手，北极星在这条轨道上，所以大熊座是在这边，天鹅座是这边……」
+				PRINTFORML 啊师傅别念了啊！我只想要和你看星星美不美而已啊！！
+				PRINTFORML 「嗯。。。应该很美吧？那只大天狗就是以星星为弹幕，还有黑白魔法师也是星星的魔法呢。」
+				PRINTFORML 所以蓝大人有兴趣和我看看星星吗？
+				PRINTFORMW 「橙还要做功课的说！不行！」
+			ENDSELECT
+		ELSE
+				PRINTFORML 「你要是能開心的話就好了」
+				PRINTFORML 蓝大人也是，要是我能和您度过美好的一天的话就是我最大的荣幸了
+				PRINTFORMW 「那么，再见，另外，要是你居住的地方有什么特殊情况也要报告啊？」
+				PRINTFORMW 「回去的时候注意安全！」
+				PRINTFORMW %CALLNAME:MASTER%思考着下次怎么再把蓝约出来。
+		ENDIF
+		PRINTL 
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;反発刻印消去イベント
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 1
+		IF TALENT:恋人
+			SELECTCASE RAND:2
+				CASE 0
+					PRINTFORML 「唔。。。人非圣贤，孰能无过？」
+					PRINTFORML 「罢了，这件事就这么结束了吧。。。」
+					PRINTFORML 「今后望你三思而后行，苟日新，日日新」
+					PRINTFORML 「我也不想和你说太多的大道理，都这么大个人了，别让我操心了！我还有个橙要操心呢！」
+					PRINTFORML 「哎。。。真的是，作为我的恋人也要有点自觉啊。。。」
+				CASE 1
+					PRINTFORML 「好了，这件事到此为止了。」
+					PRINTFORML 「我曾经见过很多自大而灭亡的人，希望你不会是我过往云烟中遇见的下一个。。。」
+					PRINTFORML 「虽然在我看来问题不是很大，但你这种趋势值得警惕！」
+					PRINTFORML 「作为我的恋人，我一定会好好改正你的！」
+				ENDSELECT
+		ELSEIF TALENT:恋慕
+			SELECTCASE RAND:2
+				CASE 0
+					PRINTFORML 「嘶。。。算了，我现在不生气了。」
+					PRINTFORML 「佛说过我们能遇见就是缘分，所以我很珍惜这份关系」
+					PRINTFORML 「我也希望你能记得这份关系」
+					PRINTFORML 「今天的教训我希望你能真的认真反省」
+					PRINTFORML 「你别想在九尾狐的眼皮底下撒谎！」
+					PRINTFORML 「呐？我可是很看好你的？别让我看错人！」
+				CASE 1
+					PRINTFORML 「总之，我不生气了。」
+					PRINTFORML 「你别这么做了，我有充足的例子来驳倒你的行为的充分性，换句话说就是你的行为是不可取的！」
+					PRINTFORML 「我知道你是不是真的在反省的说」
+					PRINTFORML 「我也是有底线的有思想的？别想着可以遵循着畜生的思维来！」
+					PRINTFORML 「今后好好努力吧？」
+				ENDSELECT
+		ELSEIF TALENT:思慕
+			PRINTFORML 「你是个很有意思的人，所以我给你改过自新的机会」
+			PRINTFORML 「我觉得你在反省一部分行为了」
+			PRINTFORML 蓝大人的眼睛直勾勾的看着你，你感受到了恐惧
+		ELSE
+			PRINTFORML 「嗯，好了，行吧，我不追究了」
+			PRINTFORML 「别想着从我这里直接获取八云家的权利！」
+			PRINTFORML 蓝大人话也不说的走开了
+		ENDIF	
+		PRINTFORML
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;反発刻印2>1レベルダウンイベント
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 2
+		IF TALENT:恋人
+			SELECTCASE RAND:2
+				CASE 1
+					PRINTFORML 「这次的事情，我可以不生气」
+					PRINTFORML 「但是你也要认真的反省！」
+					PRINTFORML 「不要仗着我们之间的这层关系就干出这样的事！」
+					PRINTFORML 「你不要在幻想乡做出任何出格的事！」
+					PRINTFORML 「小心被送回去哦？这次是认真的警告！」
+				CASE 0
+					PRINTFORML 「这样吧？我和你说下，在周朝有个人叫荀瑶，你可能熟悉的名字是智伯。」
+					PRINTFORML 「他和你一样，拥有很大的力气，能力，但在打晋阳的时候被仇家联手击败，头颅被做成酒器了」
+					PRINTFORML 「为什么？仁义不施而攻守之势异也！军队中有人祭祀狐图腾的，所以我看到了这一悲剧！我希望你不是下一个！」
+					PRINTFORML 「？你不要凭借自身的力量做出这种不齿的事情！」
+				ENDSELECT
+		ELSEIF TALENT:恋慕
+			SELECTCASE RAND:2
+				CASE 1
+					PRINTFORML 「我说真的，我的心好痛苦。」
+					PRINTFORML 「做出这样的事情我真是太伤心了！」
+					PRINTFORML 「前几次我看你有在好好反省的，为什么这次却做出这样的事情呢？」
+					PRINTFORML 「你是我看好的人，以八云家的家名起誓，别让我失望！」
+				CASE 0
+					PRINTFORML 「你是否清楚这次行为导致的后果？」
+					PRINTFORML 「你肯定不知道，你要是知道的话为什么会做出这样的事！」
+					PRINTFORML 「为什么你会这么干？不要太过得意了！要是你没有你的能力的话你还会这么干吗？」
+					PRINTFORML 「按照天狗的行为的话，你这种有威胁的早就死在妖怪之山了！别再这么干了，我希望你以真实的心灵向我发誓！再有下次我会惩罚你的！」
+				ENDSELECT
+		ELSEIF TALENT:思慕
+			PRINTFORML 「你为什么会这么干？」
+			PRINTFORML 蓝直勾勾的盯着你
+			PRINTFORML 「明明我最初见到你时你不是这个样子的」
+			PRINTFORMW 「不要再这么干了！」
+			PRINTW
+		ELSE
+			PRINTFORML 「做出这种事别想着能逃离！」
+			PRINTFORML 你看到蓝大人的能量波动了起来
+			PRINTFORML 「你要是下次再出现的话我就直接打死你！」
+		ENDIF
+		PRINTFORML
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;反発刻印3>2レベルダウンイベント
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 0
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 3
+		IF TALENT:恋人
+			SELECTCASE RAND:2
+				CASE 1
+					PRINTFORML 「？这次我是真的太生气了！」
+					PRINTFORML 「我现在真的有点后悔和你成为这种关系了！」
+					PRINTFORML 「你的行为真是！和那时候的她一摸一样！我是造了什么孽啊！这样的关系要再经历一遍！」
+					PRINTFORML 「你不要让我失望！」
+				CASE 0
+					PRINTFORML 「我再说过一遍！身死而国灭的事我经历过太多次！」
+					PRINTFORML 「至于誓天断发何其哀也！我不想你的品行变成这样！」
+					PRINTFORML 「你要是真心悔过的话，以后每天都来找我，我教你仁义礼智信」
+					PRINTFORML 「不然，以后别说和我是恋人！我早已不想和那样的人接触了！」
+					PRINTFORML 蓝大人的尾巴升起，可以看得出她真的生气了。你感受到了恐惧。
+				ENDSELECT
+		ELSEIF TALENT:恋慕
+			SELECTCASE RAND:2
+				CASE 1
+					PRINTFORML 「%CALLNAME:MASTER%，请你做好觉悟吧？我这次可是不会放过你的！」
+					PRINTFORML 「笨蛋！我为什么会喜欢上这样的你啊！」
+					PRINTFORML 蓝大人强迫你跪下，她用木棍打在你的背上
+					PRINTFORML 「你为什么会对我做这样的事？」
+					PRINTFORML 「要是在畜生界，你早就死了！」
+					BASE:MASTER:0 -= 3000
+					BASE:MASTER:1 -= 3000
+				CASE 0
+					PRINTFORML 「好了，我知道了」
+					PRINTFORML 「变态，你竟然！」
+					PRINTFORML 「你竟然。。。」
+					PRINTFORML 蓝大人嘴上没有再说话了，但是心里却在想着能不能用狐妖的方法解决，哪怕是把你变成式神加以矫正。。。
+				ENDSELECT
+		ELSEIF TALENT:思慕
+			PRINTFORML 「也许是我看错了人，我真是走了眼啊！」
+			PRINTFORML 你看到蓝大人能量剧烈波动了起来
+			PRINTFORML 「我会在这段时间看你的行为，要是没有变好的话，那你可以试试会怎么样！」
+			PRINTFORML 蓝大人用出了狐仙思念，你感受到了莫大的恐惧
+		ELSE
+			PRINTFORML 「你真的知道你做了什么吗？告诉你，这次我本来是打算直接把你扔到东京湾的，可是紫大人好言相劝，我才没有动手」
+			PRINTFORML 「我知道你的品行是怎么样的了」
+			PRINTFORML 「以后希望你不要再靠近我了！」
+			PRINTFORMW 「敢快走开！」
+		ENDIF
+		PRINTFORML
+		RETURN 1
+	ENDIF
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+;"EVENT"系イベント
+;※※※※※※※※※※※※※※※※※※※※※※※※※※
+;==================================================
+;部屋で遭遇
+;==================================================
+@M_KOJO_EVENT_K25_1(ARG,ARG:1)
+;口上主はTARGET
+;--------------------------------------------------
+;記入チェック（=0, 非表示、1, 表示）
+LOCAL = 1
+;-------------
+IF LOCAL
+	;-------------------------------------------------
+	;小分岐
+	;-------------------------------------------------
+	;MASTERが入ってきた
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	;四季ごとに朝昼晩
+	IF LOCAL:1 && ARG == 1
+		PRINTL
+		;一日一回
+		SIF TCVAR:25:350 == 1
+			RETURN 1
+		IF TALENT:恋人
+			;DAY:2で季節を選択
+			SELECTCASE DAY:2
+			;春
+			CASE 1
+				;TIME:2で朝昼晩を選択
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「%CALLNAME:MASTER%早上好」
+					PRINTFORML 「春眠不觉晓，处处闻啼鸟。你睡的可好？」
+					PRINTFORML 「你看那个春天的妖精正在“春天到了哦！”这样的报信呢！」
+					PRINTFORMW 蓝大人凑过来拉住了你的手。
+					PRINTFORMW 「那么，既然和我遇到了，就多陪陪我吧？」
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 650 || CFLAG:MASTER:300 == 660
+						PRINTFORML 「啊！真巧啊，你是来赏樱的吗？这里300甸的樱花每一株都是特色哦？」
+						PRINTFORML 「可惜啊，我是来给紫大人办公的，不能陪你了，毕竟现在冥界财政吃紧，要好好的计划一下呢」
+						PRINTFORML 「要是有时间的话记得多去陪一陪那个冥界幽灵公主哦？她可是很寂寞的。」
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%睡懒觉了吗？已经中午了噢？」
+						PRINTFORMW 「明明是大好的春景，你却浪费掉了吗？」
+						PRINTFORMW 「好了～没有责备你呢，和我一起去白玉楼赏樱花去吧？那里的主人我认识，会给你好吃的哦？」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「晚上好、%CALLNAME:MASTER%」
+					PRINTFORMW 「都晚上了你还去哪里啊？快回去睡觉了！当然我也可以陪你睡觉的」
+					PRINTFORMW 「开玩笑了！好了，敢快回去睡觉吧？今天的春景固然好看，明天幻想乡的景色也不能错过呢。」
+				ENDSELECT
+			;夏
+			CASE 2
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「早上好、%CALLNAME:MASTER%」
+					PRINTFORML 「你昨晚睡的可安好？夏天的蚊子可是很多呢？」
+					PRINTFORMW 「实在不行的话可以拜托一下莉格露要两只壁虎蜘蛛之类的？」
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 310
+						PRINTFORML 「我们果然心有灵犀呢，这里毕竟是幻想乡夏天最凉快的地方之一了」
+						PRINTFORML 「那个冰之妖精你只要激将一下她就会发出海量的冰呢！」
+						PRINTFORML 「你要吃刨冰吗？我去要点冰去！啊对了，这里游泳，垂钓都是不错的选择！注意安全呦？」
+						PRINTFORML 「毕竟幻想乡没有海嘛，你要是想看我的狐狸死库水的话只能在这里将就一下了。」
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%春困秋乏夏打盹冬眠是吧！感觉你一年四季都在休息啊！」
+						PRINTFORMW 「夏天这么热你也睡的着！」
+						PRINTFORMW 「咦？没有睡懒觉吗？罢了罢了！去雾之湖看看吗？不用担心！红魔馆没那么容易爆炸！」
+						PRINTFORMW 「诶？你想看泳装？变态！看你的样子，算了，我借下紫大人那一套。。。」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「%CALLNAME:MASTER%被热的睡不着了来找我是吗？」
+					PRINTFORML 「我的后面都是狐狸尾巴啊。。。我更是热的睡不着了」
+					PRINTFORMW 「河童送过来的空调还坏了，你问为什么紫大人不用隙间带点冰块过来？也是啊？我去和紫大人说一下吧，你也要一块吗？」
+				ENDSELECT
+			;秋
+			CASE 3
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「啊！天凉好个秋啊！%CALLNAME:MASTER%注意昼夜温差，别感冒了？」
+					PRINTFORML 「诺？苹果要么？妖怪山上采的！有些天狗就是以卖果蔬为生的。味道还不错。」
+					PRINTFORMW 「张嘴，啊——真乖！」
+					BASE:MASTER:0 += 300
+					BASE:MASTER:1 += 300
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 810
+						PRINTFORML 「说到秋景，确实是这里的枫染山野，黄中透红最好看了！」
+						PRINTFORML 「阿拉，这么好的风景，适合开宴会呢？」
+						PRINTFORML 「那些天狗真是不让人省心啊，这个季节又到了她们活跃的时候了。」
+						PRINTFORML 「话说你看没看今天的新闻？“博丽巫女无所事事，本报记者予以教训”」
+						PRINTFORML 「我听紫大人说昨天的博丽神社好像那只天狗被灵梦贴了符卡，绑了龟甲缚玩弄到了下半夜才停止啊？」
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%要去哪里？秋天这么冷记得加衣服啊！」
+						PRINTFORMW 「去妖怪之山约会如何？我今天有很长的时间呢」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「%CALLNAME:MASTER%，夜里知了的声音好大啊。」
+					PRINTFORML 「我听说现在外界田野里看不到青蛙，夜里听不到知了叫，而且还在对除人类外的生物净化？」
+					PRINTFORML 「不算净化，只是驱逐？可是有的人把动物放在笼子里！也太过分了吧？」
+					PRINTFORMW 「嘛，先不说这些了，欣赏秋风中的满月也很不错呢」
+				ENDSELECT
+			;冬
+			CASE 4
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「早上好、%CALLNAME:MASTER%感到冷吗……？」
+					PRINTFORML 「家里冷吗？我去你家坐坐吧？别拒绝我哦？你的恋人自然想去哪里都可以啦」
+					PRINTFORMW 那么蓝大人想要吃烤团子嘛？我去买点？另外注意别把尾巴点着了？
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 610 || CFLAG:MASTER:300 == 630
+						PRINTFORML 「啊，是你啊，你是来陪我的吗？」
+						PRINTFORML 「真的是，你要尽一点恋人应有的义务啊！快点过来」
+						PRINTFORML 「紫大人这个时候冬眠了，很少能看见她；橙也是总是和其他猫咪混在一起，我有点寂寞了」
+						PRINTFORML 「你抱抱我嘛～我也是有需求的啊」
+					ELSE
+						PRINTFORML 「啊，？能在这里遇到真是巧了啊！」
+						PRINTFORMW 「这个季节我要去人间之里工作了！用火安全，棉被，棉袄，柴火，还有最近的用电安全」
+						PRINTFORMW 「哎呀，这真是一份辛苦的工作啊！」
+						PRINTFORMW 「我们搞完了这些后和饕餮一起去吃个饭吧！」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「唔！真冷啊！我现在有点羡慕那个雪女和冰妖精了！」
+					PRINTFORML 觉得冷的话就要早点钻进被窝里啊蓝大人
+					PRINTFORMW 「你冷不冷？要是冷的话我后面的毛新长出来了，在我的尾巴里取暖如何？」
+				ENDSELECT
+			ENDSELECT
+		ELSEIF TALENT:恋慕
+			;DAY:2で季節を選択
+			SELECTCASE DAY:2
+			;春
+			CASE 1
+				;TIME:2で朝昼晩を選択
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「%CALLNAME:MASTER%早上好吗？」
+					PRINTFORML 「你看那个头上戴着那种帽子的妖精！那是莉莉白！春之妖精呢！」
+					PRINTFORML 「幻想乡没有正常的四季轮换，要靠这些妖精来告诉大家四季的更替。不然陷入了里春可是很危险的啊！」
+					PRINTFORMW 「天空的花之都，花如幻想一般。。。」
+					PRINTFORMW 「好了，不说这些了。你要是没事的话，不如陪陪我？」
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 650 || CFLAG:MASTER:300 == 660
+						PRINTFORML 「啊！你是来赏樱的吗？真是雅兴啊。」
+						PRINTFORML 「你看那株最大的樱花。墨色的那个，那叫西行妖哦？一位公主大人的尸骨化为了黄土啊，这开放的也许就是她的灵魂吧？」
+						PRINTFORML 看着满山的樱花飘落，蓝大人给了你膝枕，你侧过头去，看着樱花飘落。
+						PRINTFORML 「绚丽的绽放吧！墨染的樱花啊。。。生死之境，少女幻葬。。。」
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%中午好！你吃过饭了吗？」
+						PRINTFORMW 「春天容易免疫力下降，记得吃饱饭，保暖，多运动哦？」
+						PRINTFORMW 「要不要我一起去白玉楼赏樱花去？幻想乡特色，不可不尝的！」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「晚上好、%CALLNAME:MASTER%」
+					PRINTFORMW 「春天昼夜温差大，记得加衣服！」
+					PRINTFORMW 「要是睡不着的话，我给你讲个故事？听好了，从前有座山，山里有座庙，。。。」
+				ENDSELECT
+			;夏
+			CASE 2
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「早上好、%CALLNAME:MASTER%」
+					PRINTFORML 「夏天的早上就这么热了啊」
+					PRINTFORMW 「我有点想用法术隐藏起我的尾巴了」
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 310
+						PRINTFORML 「那个，中午好！」
+						PRINTFORML 「你看那边的小屋就是9的居住地了」
+						PRINTFORML 「别看她好像无忧无虑的，其实心思很是细腻呢！」
+						PRINTFORML 「她手里握着的雪绒花是雪女送给她的。她们亲如母女，但是却只能一年见3个月」
+						PRINTFORML 「明明琪露诺还是孩子啊！9个月的思念才换来3个月的见面。」
+						PRINTFORML 「最可怕的是雪女有离世的一天，但妖精的岁月是无穷的啊，她要经历那一刻：无论怎么等待，蕾蒂都不会回来了。。。」
+						PRINTFORML 「无有何之乡啊。。。」
+						PRINTFORML 大家好，听到这里有寿命论的气息啊？真是被看扁了
+						PRINTFORML 无论是一年的见面还是以后的见面，爱的力量，是无限的！
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%？夏天真热啊！」
+						PRINTFORMW 「走走走！一起去吃个刨冰吧？」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「%CALLNAME:MASTER%你好！还不睡吗？」
+					PRINTFORML 「我现在在默念心经，这样到了睡觉的时候就能快点静下来睡着了」
+					PRINTFORMW 「可是看到了你之后我的心里太激动了，根本就静不下来了。。。你能不能抱抱我？」
+				ENDSELECT
+			;秋
+			CASE 3
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「%CALLNAME:MASTER%别感冒了？记得吃饭啊！」
+					PRINTFORML 「我这里有点团子，你吃点当零食吧？正餐也要吃！早餐一定要吃饱啊！」
+					BASE:MASTER:0 += 150
+					BASE:MASTER:1 += 150
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 810
+						PRINTFORML 「你来这里赏枫叶的吗」
+						PRINTFORML 「妖怪之山真是个神奇的地方啊」
+						PRINTFORML 「你知不知道鸦天狗是用剑的高手？源氏曾经有人就是和天狗学的剑术以治退妖怪的呢」
+						PRINTFORML 「她们生性比较傲慢，你要和她们好好说话啊」
+						PRINTFORML 「要学知识的话也欢迎找她们，她们可是和歌大师呢」
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%要去哪里？秋天这么冷记得加衣服啊！」
+						PRINTFORMW 「我想要去监督下秋季传染病的发作情况啊，永远亭能贡献的药毕竟有限」
+						PRINTFORMW 「注意安全！别去溪边！秋水可能暴涨！」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「%CALLNAME:MASTER%，夜里的月色别有一番滋味啊。」
+					PRINTFORML 「你知道嫦娥的故事吗？我见过她本人，还有纯狐。」
+					PRINTFORML 「可惜了世间的欲望啊！竟然铸此大错！我真是恨到肠子有点青啊！」
+					PRINTFORMW 「为了不死的诱惑，杀伐，纷争。。。甚至在日本也重蹈覆辙了。。。」
+					PRINTFORML 「飘上月球，不死之烟。。。」
+				ENDSELECT
+			;冬
+			CASE 4
+				SELECTCASE TIME:2
+				;朝
+				CASE 1,2
+					PRINTFORML 「早上好、%CALLNAME:MASTER%！」
+					PRINTFORML 「你缺衣服吗？我可以给你一套“保暖套装”和两斤柴火！放心，村民们有一笔过冬社保，是紫大人从外面学的做法。」
+					PRINTFORMW 「悄悄告诉你，其实村民们的租金根本不够用，这是天狗和鬼族分别贡献的棉衣和木头。。。」
+					PRINTFORML 「另外，要是小孩子受冷的话直接给她们照顾就好了。她们严禁弃婴。要是被查出来了虐待儿童的话，她们就会把孩子抢走，自己照顾。灵梦会睁一只眼闭一只眼的」
+				;昼
+				CASE 3,4
+					IF CFLAG:MASTER:300 == 610 || CFLAG:MASTER:300 == 630
+						PRINTFORML 「你是。。。来陪我的？没有没有，我很高兴。」
+						PRINTFORML 「紫大人。。。橙。。。」
+						PRINTFORML 「你能。。。靠在我身边吗？」
+					ELSE
+						PRINTFORML 「？怎么样？最近过得还舒服吗？」
+						PRINTFORMW 「你和我去人间之里视察一下吧！有些地方可能房子烧了，要帮忙重建；米不够了，要去低租借米；还有一氧化碳中毒的巡逻啥的」
+						PRINTFORMW 「真是奇特，人类的房子天狗河童来建设，米的话我们尽量能拖就拖，拖到3年后就谎称账对不上，不用还了，要是还清了就给予化肥，农药和秋姐妹神力的奖励」
+						PRINTFORMW 「总之，妖以人为本，我们要尽量维护这种幻想乡的平衡啊」
+					ENDIF
+				;夜
+				CASE 5,6,7
+					PRINTFORML 「唔！你不睡吗？」
+					PRINTFORML 「哈，你来找我有何贵干？是来报告什么事情的吗？」
+					PRINTFORMW 「咦？有这种事？我马上去人间之里看看！多谢你了，！」
+				ENDSELECT
+			ENDSELECT
+		ELSEIF TALENT:思慕
+			PRINTFORML 「%CALLNAME:MASTER%。你好？」
+			PRINTFORMW 藍親切的笑著問候我
+		ELSE
+			PRINTFORML 「你好？最近有什么情况吗？」
+			PRINTFORMW 藍朝向我揮了揮手
+		ENDIF
+		TCVAR:25:350 = 1
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;TARGETが入ってきた
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 2
+		;萬聖節、ちゃんと運動のの？
+		IF DAY:2 == 3 && DAY:3 == 30 && !TCVAR:1:今天有否见面
+			IF TALENT:恋人
+				PRINTFORML 「那个。。。额。。。托洛克哦锤科？」
+				PRINTFORML 你在进入房间的时候蓝大人堵在门口，念着写在纸上的话。念完后用尾巴蒙住了你的眼睛。
+				PRINTFORML %CALLNAME:MASTER%感受着尾巴的柔软，告诉蓝大人是Trick  or  treat？
+				PRINTFORML 「啊！不管了！我又不是纯狐，没这么快学会希腊文的！要说的好的话要用式神了，总之我要高粱怡！」
+				PRINTFORML 蓝大人我早就准备好了，诺，在——（一大团毛茸茸）
+				PRINTFORML 「笨蛋！你没有准备对吧？你没有准备对吧？」
+				PRINTFORMW 「你要是没有准备的话我可就要捣乱了！」
+				PRINTFORML 「受死吧！我开动了！」
+				EXP:25:口淫経験 ++
+				EXP:25:精液経験 ++
+				EXP:MASTER:射精経験 += 2
+				EXP:MASTER:絶頂経験 += 1
+			ELSEIF TALENT:恋慕
+				PRINTFORML 「你好，你知道吗？今天是万圣节呢！」
+				PRINTFORML 你在进入房间的时候蓝大人对你点头示意。
+				PRINTFORML 「万圣节是中世纪才有的节日啊。我还见过杰克本魂呢，就是南瓜灯的来历。现在他应该还在伦敦游荡吧。」
+				PRINTFORML 「那个时候不只是东方，连西方也是百鬼夜行，妖妖跋扈的好年代呢。那个时候的琪露诺比现在高一点吧，还会去吓人呢！」
+				PRINTFORML 「但是感觉现代的万圣节没那种味道了，东方还是西方都不记得万圣节是干嘛的了，他们不知道，只知道要消费啊。。。」
+				PRINTFORML 是啊！但我认为，实际的问题就在于：蓝大人您到这里干嘛？。。。啊！我的脚好痛！
+				PRINTFORMW 「多嘴！诺！桌子上的糖我要吃点！我还没有过次万圣节呢。。。」
+			ELSE 
+				PRINTFORML 「%CALLNAME:MASTER%，你好。今天是万圣节。可能会有几个金发碧眼的鬼魂闯到你的家里，你要好好接待他们，一般而言给她们一点糖就行」
+				PRINTFORML 「今天您可能要晚点睡了，万望您谅解。毕竟幻想乡也是要帮助西方的鬼的。信仰的缺失是全人类的损失。」
+				PRINTFORML 「桌子上我已经给您发了一些水果糖和奶糖。不要给小孩子吃薄荷糖！还有，叮嘱她们一天吃个两三块就行了，吃完后要记得刷牙」
+				PRINTFORMW 「如果有剩余的话就给您吃了吧。您也要记得刷牙啊。还有不要在饭前吃，这个当不了正餐的！」
+			ENDIF
+		;聖誕節、没有圣诞老人的幻想乡呢
+		ELSEIF DAY:2 == 4 && DAY:3 == 25 && !TCVAR:1:今天有否见面
+			IF TALENT:恋人
+					PRINTFORML 「%CALLNAME:MASTER%你好，圣诞节快乐」
+					PRINTFORML 「啊。。。现在的人里广场可是很热闹呢。」
+					PRINTFORML 那蓝大人不打算去看一看吗？
+					PRINTFORML 「笨蛋，因为有你在这里啊。」
+					PRINTFORML 「说实话，我不是很赞成办圣诞节。」
+					PRINTFORML 蓝大人靠在了你的身边
+					PRINTFORML 「毕竟幻想乡是收留要被遗忘的信仰的地方，所以这种是个地球人就知道的节日我真觉得没必要办」
+					PRINTFORML 哎呀，就当是一个宴会的理由吧。蓝大人想吃点东西吗？我们去买点去？
+			ELSEIF TALENT:恋慕
+				PRINTFORML 「圣诞节快乐」
+				PRINTFORML 蓝大人对%CALLNAME:MASTER%打招呼
+				PRINTFORML 「欸。。。又是一年的圣诞节啊。。。」
+				PRINTFORML 「你知道吗？圣诞老人的装扮来自于20世纪啊，这个传说是为了能多卖东西而编撰的」
+				PRINTFORML 「毕竟圣指的就是耶稣，和圣诞老人有什么关系呢？拉普兰德的雪橇和中东的马槽和东方圣人毕竟没什么关系嘛。」
+				PRINTFORML 「其实神子大人也是在马槽出生的呢。那里有一匹甲斐的黑马可是很喜欢神子的啊。」
+				PRINTFORMW 「那匹马现在。。。有点不敢回神灵庙啊，毕竟她的行为和圣人的教导确实相去甚远。。。」
+				PRINTFORML 「不说这么多了，你有没有想要的圣诞礼物？」
+			ELSE 
+				PRINTFORML 「你好，向你致以圣诞节的祝贺。」
+				PRINTFORML 「那么，你想要什么圣诞礼物嘛？作为幻想乡的负责人，应该对劳作了一年的人慰问一下。」
+				PRINTFORML 「巧克力？新书？还是日用品？」
+			ENDIF
+		;ヴァレンタイン、大概是情人节的样子
+		ELSEIF DAY:2 == 4 && DAY:3 == 14 && DAY:0 != 1 && !TCVAR:1:今天有否见面
+			SELECTCASE CFLAG:好感度
+				CASE 1000 TO 3000
+					PRINTFORML 「啊。。。？这是我送给你的巧克力」
+					PRINTFORML 「我做的饭你还信不过嘛？诺，快吃了吧。」
+					PRINTFORML 「怎么样？好吃吗？会不会糖放的有点多？」
+					PRINTFORMDL 蓝大人做什么都是好吃的！我谁的都不吃，就吃蓝大人做的！
+					PRINTFORMDL 「哎呀，小嘴真甜啊。」
+					PRINTFORMW 那也没有蓝大人做的巧克力甜！蓝大人的巧克力又甜又香！
+					PRINTFORMW 「好了～我还要去给其他家送呢。还有4，5家要送啊」
+					PRINTFORMW 你知道了是义理巧克力后有点失望，向着收到本命巧克力努力吧！
+					BASE:MASTER:0 += 300
+					BASE:MASTER:1 += 300
+				CASE 3001 TO 5000
+					PRINTFORMW 「%CALLNAME:MASTER%？我要把这个巧克力给你！」
+					PRINTFORML 你收到了一份精美的巧克力，上面有用毛笔精心书写的诗歌
+					PRINTFORML 「今天是情人节的缘故……我给你写了和歌。。。」
+					PRINTFORML バレンタインデーに、掃除とお茶を泡す名人へ 和歌を作りました；
+					PRINTFORML バレンタイン到来、掃除泡茶の匠 手の技と、心の暖かさが湧き上がる。。。这是什么？
+					PRINTFORML 「怎么样。。。情人节至，扫地泡茶匠， 手中技艺，心中温情荡。 尘埃不起，爱意满室香， 一壶茶香，诉说着衷肠。」
+					PRINTFORML 眼神一直在躲避着%CALLNAME:MASTER%的样子
+					PRINTFORMW 蓝大人写的好诗。。。好诗啊。。。蓝大人刚从佛罗里达日本事务处回来吗？
+			ENDSELECT
+		ELSEIF TALENT:恋人
+			SELECTCASE RAND:2
+				CASE 1
+					PRINTFORML 「啊！我来找你了！」
+					PRINTFORML 蓝大人风尘仆仆的赶过来了，把你扑倒了
+					PRINTFORML 「呐呐呐！小蓝蓝来了哦！」
+					PRINTFORML 蓝大人你和紫大人学的吗？还是昨晚紫大人给你进行系统更新时又一次展示惊世智慧了？
+					PRINTFORML 「讨厌啦～肯定没有的了～今天怎么说？要和我去约会嘛～」
+				CASE 0
+					PRINTFORML 「那个。。。你好？我来了。。。」
+					PRINTFORML 蓝大人？当然欢迎来了！
+					PRINTFORML 「我发现了一些有趣的东西，想和你分享。。。」
+					PRINTFORML 蓝大人？有什么呢？不会就是想和我呆在一起吧？
+					PRINTFORML 「哪里有！（气鼓鼓）以下是一些可以作为恋人在一起的理由：。。。啊！我在干什么啊！」
+					PRINTFORML 蓝大人的式可以当chatgtp用？什么苹果式神？！
+				ENDSELECT
+		ELSEIF TALENT:恋慕
+			IF ABL:MASTER:教養 >= 4
+				PRINTFORML 「那个。。。？你有教孩子的经验吗？」
+				PRINTFORML 「你才识渊博，一定能够教育好橙的！」
+				PRINTFORML 那个。。。蓝大人直接在式里面加入不就好了吗？
+				PRINTFORML 「那可不行！总是依赖式的话橙不久成了机器人了吗？机器没有感性能力的，在一些事物的处理上不如人方便」
+				PRINTFORML （其实也是想要和你在一起呢。。。）
+				PRINTFORML 「总之，之后我们两个就教育一下橙啰？我去用式叫她过来。。。什么？！她说她在血池地狱？！」
+				PRINTFORML 「啊吓死我了，她在骗我呢！是饕餮带坏了她啊」
+				PRINTFORML 看来确实需要好好教育一下啊。。。
+			ELSE 
+				PRINTFORML 「那个……我又来教你知识了。。。作为我的帮手，你不能没有什么知识啊。。。」
+				PRINTFORML 「你来看这里。。。关关雎鸠在河之洲。。。」
+				PRINTFORML 「你在看哪里啊？不会是我的胸前吧？」
+				PRINTFORML 蓝大人故意弯下腰来轻轻摇晃身体，还在故意制造接触，扰的你心神不宁。
+				PRINTFORML 「变态！作为惩罚！你今天就呆在这里和我学习。。。好吗？嘛，陪陪我吧。。。」
+			ENDIF
+		ELSEIF TALENT:思慕
+			PRINTFORML 「%CALLNAME:MASTER%啊、我要进来了」
+			PRINTFORML 你看到蓝大人进入你的房间时满脸的笑意。
+			PRINTFORML 「啊！坦白说，你的房间是我为数不多能放松的地方啊！」
+			PRINTFORMW 诺！我刚刚打扫好房间，蓝大人喜欢这里吗？我真是不胜荣幸呢！这里有热茶，蓝大人一路辛苦，喝一点吧？
+			PRINTFORMW 「又是你的泡茶扫地大法是吧？那我就恭敬不如从命了。」
+		ELSE
+			PRINTFORML 「？我来视察一下你！失礼了！」
+			PRINTFORML 蓝大人进入了房间。
+			PRINTFORML 「嗯、记得出门要关火，锁门啊，如果有电气设备及时断电！这里电很贵啊！」
+			PRINTFORML 蓝大人滔滔不绝的讲着安全注意事项
+			PRINTFORMW
+		ENDIF
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;TARGETが風呂に入ってきて一緒に入る
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 3
+		PRINTL
+		IF TALENT:恋人
+			SELECTCASE RAND:4
+				CASE 3
+					PRINTFORML 「%CALLNAME:MASTER%？我进来了哦？没必要躲的嘛～」
+					PRINTFORMDL 你想着蓝大人那可怕的技术，欲望，还有隐隐作痛的腰子，你不禁打了一个激灵。
+					PRINTFORML 「嘿%CALLNAME:MASTER%！你能安心泡澡的日子已经结束了！（低沉的声音，伸手）给我你的小牛牛！」
+					PRINTFORML 如果你要手淫的话，就要自己来让他兴奋起来。（起身，浴室难以降解。。。吗？）为什么浴室降解了啊？！
+					PRINTFORML 你看到了外边100余号少女（包含成熟女人）看着你的身体，顿时呆住了，但是你一眨眼，一切都消失不见了。
+					PRINTFORML 「怎么样？狐仙思念幻术！kon——好不好玩？」
+					PRINTFORMW 蓝大人开心的比了一个狐窗。「那么，我就过来了哦？当然，你的下面也别想逃过去了。。。」
+					EXP:MASTER:射精経験 += 2
+					EXP:MASTER:絶頂経験 += 1
+				CASE 2
+					PRINTFORML 「嗯……我进来了哦…」
+					PRINTFORML 蓝大人全裸着进到了水中，水把尾巴浸湿了
+					PRINTFORMDL 「诺？你喜欢我的白豆腐吗？」
+					PRINTFORML 你可以看到蓝大人的乳白色柔软物体一半沉浸在了水中，还有一半在水面上，你下面的牛牛抬起了头。
+					PRINTFORML 「嗯……看！两艘欧派巡洋舰进攻了哦？伸入敌方潜艇中！」
+					PRINTFORMW 「俘虏敌方潜艇！现在开始战败凌辱！一定要让潜艇排水！」
+					EXP:MASTER:射精経験 += 2
+					EXP:MASTER:絶頂経験 += 1
+				CASE 1
+					PRINTFORML 「%CALLNAME:MASTER%？你喜不喜欢这样呢？」
+					PRINTFORMDL 蓝大人在沾了水的尾巴上打上泡沫，把你夹住了
+					PRINTFORML 「让我用尾巴来帮你洗澡吧？橙小时候也这么干过呢！」
+					PRINTFORML 「绝对不能睁眼哦？泡泡会进到眼睛里的！」
+					PRINTFORML 蓝大人用尾巴抚摸着你的全身上下，你感到十分瘙痒。各个敏感部位都被抚摸着，让你止不住的兴奋起来。
+					PRINTFORML 「啊呀？下面已经这么硬了啊？」
+					PRINTFORML 蓝大人把你的牛牛伸出尾巴包围圈，用水洗净。你已经忍不住蓝的按摩了，顿时喷出了精液
+					PRINTFORML 「真的有这么舒服吗？在清洗的时候就射出来了？那么既然又精神起来了，那我就开动了？」
+					EXP:MASTER:射精経験 += 2
+					EXP:MASTER:絶頂経験 += 1
+				CASE 0
+					PRINTFORML 「%CALLNAME:MASTER%？帮我洗洗身体吧？」
+					PRINTFORML 你感受着蓝大人的肌肤一边把泡沫涂抹在蓝大人的身上
+					PRINTFORML 「前面要涂的均匀哦？你看这里（蓝大人晃了晃，欧派随之抖动），都没有涂抹干净嘛～」
+					PRINTFORML 你非常紧张，只好照着蓝大人的指使行事。
+					PRINTFORML 「…呼呼！小坏蛋，不会想趁着给打泡泡的时候摸姐姐的欧派吧？」
+					PRINTFORML 蓝大人在%CALLNAME:MASTER%的牛牛上揉捏，不一会儿就就吐出了乳白的浊液
+					PRINTFORML 「下面的地方你也没有涂好哦！那么涂好了有奖励，涂得不好有惩罚，那么请做好准备吧？」
+					EXP:25:手淫経験 ++
+					EXP:MASTER:射精経験 += 2
+					EXP:MASTER:絶頂経験 += 1
+				ENDSELECT
+		ELSEIF TALENT:恋慕
+			PRINTFORML 「哎呀、是你啊？你欢迎我来嘛～」
+			PRINTFORML 蓝大人？您来了！还是像往常一样欢迎。。。。。。嗯。。。。。。嗯？
+			PRINTFORMW 不对啊蓝大人！您来这里干嘛啊！（遮）
+			PRINTFORML 「那个。。。我是不是惹了你不开心了？kon——唔——」
+			PRINTFORML 不是！不是！蓝大人你别这样啊！您开心就好！您过来洗吧！洗个澡而已不至于蓝大人！
+			PRINTFORMW 蓝大人立马转换了表情。扑到了你的身边，溅起了好多水花
+			PRINTFORML 「真的吗？那么我不客气了哦？（靠在你的身上，蹭，蹭）」
+			PRINTFORML 是这样啊蓝大人！中国人的性格总是喜欢折衷的。。。另外蓝大人不要动啊！欧派！欧派！
+			PRINTFORML 「诶？真是变态呢？你竟然已经立起来了？这么喜欢我吗？和我的感情一样呢～」
+		ELSE
+			PRINTFORML 「哎呀！是你啊？贵安！」
+			PRINTFORML 「恕我失礼，今天的工作实在太忙了！我没有时间等待了，我们两个一起洗一下，你应该不介意吧？」
+			PRINTFORML 自然！能和美人共浴使我不胜感激！蓝大人是为了幻想乡而操劳，没把我赶出去已是宽宏大量，我自然不会说什么的！
+			PRINTFORML 「再次感谢您的谅解！最后，谢谢您了！有时间一定要驾临敝舍啊！」
+			PRINTFORML 蓝大人您家要是敝舍的话幻想乡就没好地方了
+		ENDIF
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;TARGETが風呂に入ってきて出て行った
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 4
+		IF TALENT:恋人
+			SELECTCASE RAND:2
+			CASE 1 
+				PRINTFORML 「啊？%CALLNAME:MASTER%？」
+				PRINTFORML %CALLNAME:MASTER%看到了蓝大人的裸体
+				PRINTFORML 「唔%CALLNAME:MASTER%？怎么说？要不要？」
+				PRINTFORMW 蓝大人做出口交的手势
+				PRINTFORML 啊算了吧蓝大人，每次我来洗澡你进来就腰子疼。。。好像被式所固定住了一样。。。
+			CASE 2
+				PRINTFORML 「啊？%CALLNAME:MASTER%？」
+				PRINTFORML %CALLNAME:MASTER%看到了蓝大人的裸体
+				PRINTFORML 「唔%CALLNAME:MASTER%？怎么说？要不要？」
+				PRINTFORMW 蓝大人把欧派向上托了一托，故意显露出自己的丰满。
+				PRINTFORML 啊算了吧蓝大人，每次我来洗澡你进来就腰子疼。。。好像是被式所固定住了一样。。。
+			ENDSELECT
+		ELSEIF TALENT:恋慕
+			PRINTFORML 「咦？你怎么在这里？」
+			PRINTFORML 浴室门被拉开，%CALLNAME:MASTER%发现了蓝大人
+			PRINTFORML 「那个。。。你介不介意我。。。那个」
+			PRINTFORML 啊蓝大人时间很急吗？我这就起来——
+			PRINTFORML 「啊不用了（笨蛋！）你好好洗就是了，我还有别的事。。。」
+			PRINTFORMW 「祝洗个好澡！」蓝大人离开了。
+		ELSEIF TALENT:愛欲
+			PRINTFORML 「嗯？是%CALLNAME:MASTER%……」
+			PRINTFORML 你看到蓝大人的脸红的像是苹果一样。
+			PRINTFORML 「对不起，叨扰了。。。」
+			PRINTFORML 蓝大人转过身去，但脸仍看着你，你看到蓝大人的脸色有些迷离
+			PRINTFORML 「…话说你最近在幻想乡有什么需求吗？下流一点的需求也行。。。」
+			PRINTFORMW 蓝大人生病了吗？还是好好休息吧？
+		ELSE
+			PRINTFORML 浴室的门被拉开，你发现了一只素裸天狐
+			PRINTFORML 「啊！十分抱歉！那算了，我明天再洗吧。」
+			PRINTFORMW 蓝大人离开了这里。
+		ENDIF
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;TARGETが風呂に入ってきて追い出された
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 5
+		PRINTFORML 前面貌似有结界挡住了你的去路，门口上有符纸
+		PRINTFORMDL %CALLNAME:MASTER%凑近闻了闻，貌似有一股狐狸的味道。
+		IF TALENT:恋人
+			SELECTCASE RAND:2
+				CASE 1
+					PRINTFORML 好奇的上去摸了一下，你立刻感到有灵力波动。
+					PRINTFORML 「诶？吗，我这就把符纸摘下来，你等着和我交尾吧！」
+					PRINTFORMDL 屋内传来了水声，你先生感受到了不好的预感，立马逃了出来。
+				CASE 0
+					PRINTFORML 好奇的上去摸了一下，你立刻感到有灵力波动。
+					PRINTFORML 「？你要和我一起洗澡吗？我这就过来了」
+					PRINTFORMDL 你感受到了可能和蓝洗澡这件事一定会演化为牛牛的悲鸣。所以你推脱了一下，和蓝告别
+					PRINTFORMW 「诶？你怎么知道我想和你交尾的？」
+			ENDSELECT
+		ELSEIF TALENT:恋慕
+			PRINTFORML 好奇的上去摸了一下，你立刻感到有灵力波动。
+			PRINTFORML 隔着门板传来了蓝大人的声音
+			PRINTFORML 「那个，？你想要洗澡的话可以进来的说。。。」
+			PRINTFORMDL 你告诉蓝大人其实自己没有这么着急洗
+			PRINTFORMDL 蓝大人表示了惋惜
+			PRINTFORMW 「诶。。。有点可惜的说。。。」
+		ELSE
+			PRINTFORML 你知道最好不要轻易的动这些东西，所以你直接走人了
+		ENDIF
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;外出先で遭遇した
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 6
+		IF TALENT:恋人
+			SELECTCASE CFLAG:MASTER:300
+				CASE 1010
+				;此处保留月之都相关地点是为了致敬依姬口上作者
+					;大雨,台風
+					IF GROUPMATCH(天候, 5) || FLAG:異常気象 == 9
+						PRINTFORML 「咦？这种天气你怎么在这里？」
+						PRINTFORML 哎呀！这槐安通道怎么会有这么大的风啊！是不是月之都有在搞什么军事实验啊！
+						PRINTFORML 「则！」
+						PRINTFORML 蓝大人抱住了你，你们艰难的在行走
+						PRINTFORML 阿拉！记得早点回去啊！月之都离幻想乡的距离很远啊！
+					;雨,霧雨,霧
+					ELSEIF GROUPMATCH(天候, 4, 6, 7)
+						PRINTFORML 啊！蓝大人！下雨了！
+						PRINTFORML 「呀！这里为什么会有雨？我们去别的地方躲一下吧？」
+						PRINTFORML 你和蓝大人快速经过槐安通路，你以为可能是什么月之都气象武器，或梦之国的豆腐渣工程
+					;雪,細雪,霧雪,雨雪交加
+					ELSEIF GROUPMATCH(天候, 8, 10, 11, 12)
+						PRINTFORML 「瑞雪照丰年！不过这里为什么会下雪？」
+						PRINTFORML 大概是月之都比较冰冷，幻想乡有水分进入通道而导致的吧？
+						PRINTFORML 「话说纯狐和嫦娥在地上的那个年代可没这么低温啊！不知道她们现在会怎么想啊。。。」
+					ELSE
+						PRINTFORML 「咦？你怎么在这里？去月之都吗？」
+					ENDIF
+					SELECTCASE RAND:4
+						CASE 3
+							PRINTFORML 「我来这里是为了去找探女大人呢，我要去劝她放弃给正邪配备4个师的武装」
+						CASE 2
+							PRINTFORML 「我来这里是为了去和探女大人商量一下能不能让她把正邪接回去？」
+						CASE 1
+							PRINTFORML 「我来这里是为了去找丰姬大人呢，我要去威慑她不要对幻想乡有染指！不然我们和纯狐联手！」
+						CASE 0
+							PRINTFORML 「我来这里是为了去找依姬大人呢，我要去和她说一下她们的师傅的近况呢」
+					ENDSELECT
+					PRINTFORML 蓝大人拉住了你的手，慢慢的抚摸着
+					PRINTFORML 「槐安通路虽然是幻想乡的潜在危险，其实风景不错呢」
+					PRINTFORML 「那么，既然你来了，来月之都办完事后我们一起去找那只梦貘吧？我们定制个有情趣的梦。。。」
+				CASE 1050
+						PRINTFORML 你和蓝大人打招呼后，蓝大人十分吃惊的看着你。
+						PRINTFORML 「你在这里干什么啊？要是被月之都俘虏了，我还要把你赎出来！」
+					SELECTCASE RAND:2
+						CASE 1
+							PRINTFORML 你告诉蓝大人我有一些事情想和月之都请教。
+							IF TALENT:98:恋人||TALENT:99:恋人||TALENT:110:恋人
+								PRINTFORML 「请教？我看你是想找你那在月之都的小情人吧？」
+								PRINTFORML 哎呀！蓝大人是怎么猜到的啊？
+								PRINTFORML 「哼！废话！我还看不出你喜欢这样的？哎～有的人就是讨厌我这种具有魅力的女孩子，反而去找那些没表情的老年人呢～」
+								PRINTFORML 哪里哪里蓝大人（蓝大人好强的攻击性啊）！蓝大人最可爱了！
+								PRINTFORML 蓝大人笑了出来，摸了摸你的头
+								PRINTFORML 「要记得好好陪她们啊？晚上要是你回不来的话我就去月之都加入她们的调教队伍！」
+							ELSEIF TALENT:98:恋慕||TALENT:99:恋慕||TALENT:110:恋慕||TALENT:100:恋慕
+								PRINTFORML 「哦？是吗？」
+								PRINTFORML 「我看那几号人中有人对你有好感啊？你想拿下她们的话找我啊？教男人拿下这几号人对于九尾狐来说还不是轻轻松松？」
+								PRINTFORML 诶？蓝大人不介意的吗？
+								PRINTFORML 「呆子！呆子！当然介意！要不是那些人大脑升级我怕她们用武力把你抢走我还会教你这些吗？」
+								PRINTFORML 你看着叉着腰俯下身体，嘟着嘴气鼓鼓的蓝大人，感到她真的可爱极了。
+							ELSEIF TALENT:98:思慕||TALENT:99:思慕||TALENT:110:思慕
+								PRINTFORML 「你好好和那些月之都的管理者说话，她们还挺喜欢你的。」
+								PRINTFORML 「要是激化了地月矛盾，你吃不了兜着走！」
+							ELSE
+								PRINTFORML 「那么你快去吧！注意安全哦？」
+							ENDIF
+						CASE 0
+							IF TALENT:100:恋人
+								PRINTFORML 蓝大人抱着胳膊，思索了一下。
+								PRINTFORML 「你想来找你的那只兔子？」
+								PRINTFORML 蓝大人你是怎么发现的？
+								PRINTFORML 「你们的关系也太好猜了吧？那只兔子最近天天往你家跑诶？」
+								PRINTFORML 「好了好了，快去吧？人家平时要出任务的啊，有点时间陪你不容易！」
+							ELSEIF TALENT:100:恋慕
+								PRINTFORML 「kon——话说。。。你是不是和丰姬身边的兔子关系很好？」
+								PRINTFORML 「其实，她对你有点意思的哦？我来教你怎么俘获这种像我一样可爱的小女孩的心吧？」
+							ELSE
+								PRINTFORML 「那么你快去吧！慢走哦？」
+							ENDIF
+					ENDSELECT
+				CASE 1060
+				;这里我试着保留一下
+					PRINTFORML 「啊，%CALLNAME:MASTER%…」
+					PRINTFORML 「…………………你在绵月姐妹家干嘛？」
+					PRINTFORML 蓝大人愤怒的看向了你。
+					PRINTFORML 依姬丰姬微笑着一起看向了你
+					HTML_PRINT "<font color='#990066'>「欢迎光临敝舍！」</font>"
+					IF TALENT:98:恋人||TALENT:99:恋人
+						PRINTFORML 「呦？对自己的恋人就这么打招呼吗？你们月人真是独特啊？」
+						HTML_PRINT "<font color='#990066'>「阿啦,蓝大人？连自己的恋人都看管不好的人，竟然妄想和我们谈判？」</font>"
+						HTML_PRINT "<font color='#990066'>「不愧是我看上的人，品味就是不一样，会喜欢我们这样的美女也很正常吧？」</font>"
+						HTML_PRINT "<font color='#990066'>「只是可惜，要是他的身边没有狐狸精（重音）那就好了啊～」</font>"
+						PRINTFORML 「你们！！！哼！走着瞧！技术和身材都没有的家伙是守不住恋人的哦？两号平板？」
+						HTML_PRINT "<font color='#990066'>「阿拉，区区地上人竟然想挑战我们？！愚蠢！」</font>"
+					ELSEIF TALENT:98:恋慕||TALENT:99:恋慕
+						PRINTFORML 「咳咳！你回去%CALLNAME:MASTER%！」
+						HTML_PRINT "<font color='#990066'>「那个%CALLNAME:MASTER%。。。？来陪陪我们嘛。。。」</font>"
+						HTML_PRINT "<font color='#990066'>「我们可是很寂寞的呢？铃仙二号这孩子又在忙～」</font>"
+						PRINTFORML （有点可怕！不能让这两个人夺走我的东西！）
+					ELSE
+						PRINTFORML 「%CALLNAME:MASTER%？既然来到了月之都那就去别的地方转转吧？这里的气氛实在不适合你啊。」
+					ENDIF
+				CASE 450
+					PRINTFORML 「%CALLNAME:MASTER%，你来干嘛？」
+					IF TALENT:52:恋人||TALENT:53:恋人||TALENT:72:恋人||TALENT:62:恋人
+						PRINTFORML 额。。。看病？
+						PRINTFORML 「不是和你的小情人或老情人约会吗？」
+							IF TALENT:52:恋人 && TALENT:100:恋人 && TALENT:53:恋人&&TALENT:107:恋人&&TALENT:108:恋人
+								PRINTFORML 「话说你竟然所有的兔子都拿下来了？？？！！！」
+								PRINTFORML 「嗯？兔子领域大神？！」
+								PRINTFORML 「你就是从五位上因潘守吗？！源赖光都得给你上贡啊？！」
+							ELSEIF TALENT:52:恋人 && TALENT:53:恋人
+								PRINTFORML 「你把天上的因潘和地上的因潘都搞定了？」
+								PRINTFORML 「好吧。。。兔子的欲望可是很强的哦？小心身体不支～」
+								PRINTFORML 蓝大人您的欲望比兔子强多了
+							ELSE
+								PRINTFORML 「罢了罢了，不会揶揄你的啦，我来这里是来确定药物的数量别出错了。」
+								PRINTFORML 「最近出现了不少的感冒呢。。。你也要注意防护啊？」
+							ENDIF
+					ELSEIF TALENT:52:恋慕||TALENT:53:恋慕||TALENT:72:恋慕||TALENT:62:恋慕
+						PRINTFORML 怎么？蓝大人来干嘛？
+						PRINTFORML 「哼！迷途竹林寻得好自在啊？」
+						PRINTFORML 「蜿蜒百步有佳人～天皇都得不到的公主，尊贵典雅的月之头脑，可爱的兔子～」
+						PRINTFORML 蓝大人？
+						PRINTFORML 「%CALLNAME:MASTER%可不准花心哦？」
+					ENDIF
+				CASE 630
+					PRINTFORML 「你好！难得你来迷途之家啊？」
+						IF TALENT:24:恋人
+							PRINTFORML 「罪孽深重啊！竟然把橙俘获了！」
+							PRINTFORML 「呐？来这里干嘛？是想要找橙吗？」
+							PRINTFORML 「平时也来找我一下嘛～」
+							PRINTFORML 「对了，别给橙玩太激烈的哦？温柔一点！我的式感受得到！」
+						ELSEIF TALENT:24:恋慕
+							PRINTFORML 「话说你也知道橙对你有些意思吧？」
+							PRINTFORML 「也难怪，毕竟连我也被俘获了呢。。。」
+							PRINTFORML 「你要是接受了的话。。。我不会介意哦？毕竟肥水不流外人田嘛。。。」
+						ELSEIF TALENT:24:思慕
+							PRINTFORML 「橙最近总是和我提起你啊？要记得哄橙开心哦？」
+						ELSE
+							PRINTFORML 「橙最近的猫薄荷用量增加太多了！她是不是又私自收养猫了？」
+						ENDIF
+				CASE 640
+					PRINTFORML 「你好！话说这种地方不是你应该来的啊？」
+					PRINTFORML 「我正在用式调查一些怨灵的情况呢！你要是没事的话赶快走人吧？毕竟不太吉利啊！」
+				CASE 620
+					PRINTFORML 「你好！%CALLNAME:MASTER%你想知道三途川的长度吗？」
+					PRINTFORML 「我们以河长为目标函数，约束条件是人身上的钱数，河水的动力学方程，但是要乘个惩罚系数，还有。。。」
+					PRINTFORML 「这种复杂的微分方程问题是很难求出解析解的，所以只能求数值解了，我们用有限元。。。」
+					PRINTFORML 「诶？跑了？mo！真的是！我还想说这东西丰姬依姬都算不出来让我解出来了呢！记得哦！关键是货币的购买力等值换算哦！」
+				CASE 680
+					PRINTFORML 「你好。。。你怎么来到这里了。。。」
+					PRINTFORML 「就好像我不知道我为什么来到这里了。。。」
+					IF TALENT:143:恋人
+						PRINTFORML 「那个。。。饕餮最近有没有做什么很过分的事？」
+						PRINTFORML 「那孩子是个好孩子来着的。。。」
+						PRINTFORML 「要不是新王朝建立后我们的信仰流失了，我们也不会在畜生界呆着了啊。。。」
+						PRINTFORML 「那孩子以前很讨人喜欢的呢。。。」
+					ELSEIF TALENT:143:恋慕
+						PRINTFORML 「那个。。。饕餮那孩子你觉得怎么样？」
+						PRINTFORML 蓝大人怎么问这个事啊？
+						PRINTFORML 「就是。。。饕餮很可爱，对吧？」
+						PRINTFORML 「她香香软软的很好嗦，可以给她吃不同的欲望来变成不同的性格」
+						PRINTFORML 「然后。。。和她在一起也很舒服的。。。」
+						PRINTFORML 蓝大人？
+						PRINTFORML 「你要和她搞好关系哦？她可是个好孩子，肯定是心疼大鹫灵才接着干同盟长的」
+						PRINTFORML 「然后。。。我想要和饕餮，橙，和你，一起在一起的说。。。」
+					ELSE
+						PRINTFORML 「你觉得饕餮怎么样？」
+						PRINTFORML 「她可以是个好父亲一样的人吧？」
+						PRINTFORML 「她可以教导橙的！我相信！」
+						PRINTFORML 蓝大人不相信和那只火车妖怪，为何会相信四凶之一呢？
+					ENDIF
+				CASE 670
+					PRINTFORML 「诶？你怎么来地狱了？」
+					PRINTFORML 「这里一直都很让人头疼啊！尤其是她们的首领奇怪————怪T恤五球女神（小声）」
+					PRINTFORML 「似乎有小道消息，穿了她的T恤的有神力加成哦？」
+					PRINTFORML 就比如饕餮的现女友天火人，c3c2连击，残无吓破胆
+					PRINTFORML 但是兽王园更新后的神就换成了饕餮（米袋米袋米袋！您又破壁了！）
+					PRINTFORML 「好了！唉！别走那边啊，那边被封住了，原来是牛坑地狱，专门为乱杀畜生的准备的！你不想被牛头马面给踩踩背吧？」
+					PRINTFORML 「你问我怎么知道的？哈。。。听说的？（我不想告诉他以前我在这里上班啊！！！）」
+				CASE 740
+					PRINTFORML 「你好！你为什么来这里？」
+					IF TALENT:97:恋人
+						PRINTFORML 我来。。。探险？
+						PRINTFORML 「唉。。。她在家吗？我也看不出来，上面有月之都科技的遮蔽」
+						PRINTFORML 「算了，即使她在家，我来这里劝她也是无用功」
+						PRINTFORML 「%CALLNAME:MASTER%？作为她的恋人，你想不想让她拥有更好的生活？」
+						PRINTFORML 「我的意思是，正邪可以作为月人而生活。她可以享受母女团聚，月都太子爷一般的生活」
+						PRINTFORML 「而我们也不用担惊受怕的了，毕竟我们真的不敢留她，这后果太可怕了」
+						PRINTFORML 「也许是我多虑了。。。」
+					ELSEIF TALENT:97:恋慕
+						PRINTFORML 「你是已经知道了天邪鬼的这种感情，还是冥冥之中察觉到的？」
+						PRINTFORML 蓝大人？
+						PRINTFORML 「也许，正邪正在找一条属于自己的路，她不想活在她妈妈的庇护下，而是想要活出她自己作为天邪鬼的一生」
+						PRINTFORML 「她当然渴望爱，渴望生活，她身上有追求自由的那一面啊，我们幻想乡在这点上没有她崇高」
+						PRINTFORML 「好了，不说这些了。说多了大道理也没用。这确实是个可爱的孩子，幻想乡的每一个少女你都要珍惜哦？」
+					ELSE
+						PRINTFORML 「她好像不在家吧？我看不到诶？」
+						PRINTFORML 「你以后尽量劝下她，叫她和她妈说下不要点下进军妖怪之山（1/70）！」
+					ENDIF
+				CASEELSE
+					SELECTCASE RAND:3
+						CASE 2
+							PRINTFORML 「%CALLNAME:MASTER%」
+							PRINTFORML 「你来到这里干什么？」
+							PRINTFORML 你和蓝大人开心的汇报，蓝大人的尾巴一摇一晃的好可爱
+							PRINTFORMW 「那么，祝你一路平安！注意安全哦？」
+							TALENT:25:心情 = +1
+						CASE 1
+							PRINTFORML 「你好！你要去哪里？不会是去找其他的女孩子吧？」
+							PRINTFORML 蓝大人搓了搓%CALLNAME:MASTER%的腰子
+							PRINTFORML 「要是被我发现了，你等着瞧！」
+							PRINTFORMW 「路上注意安全！」
+						CASE 0
+							PRINTFORML 「%CALLNAME:MASTER%，你又在闲逛？」
+							PRINTFORML %CALLNAME:MASTER%辩解这欣赏幻想乡美景不叫闲逛，生活的事怎么能叫闲逛呢？
+							PRINTFORMW 「唔！算了！别走的太远啊！啊！我这有瓶水你拿走吧？路上买水贵！」
+					ENDSELECT
+			ENDSELECT
+			
+		ELSEIF TALENT:恋慕
+			PRINTFORML 「你好，向你致以问候。」
+			PRINTFORML 「那个，你寂寞吗？反正我是很寂寞啊。。。」
+			PRINTFORML 「要是有空的话就来陪陪我嘛～」
+			PRINTFORML 你告诉蓝大人自己还有事。
+			PRINTFORML 蓝大人的狐狸尾巴低沉的耷拉下来。
+			PRINTFORML 「慢走哦？路上注意安全！」
+		ELSEIF TALENT:思慕
+			PRINTFORML 「你好！幻想乡住的还习惯吗？」
+			PRINTFORML 「有没有什么缺少的？」
+			PRINTFORML 「记得门上符卡坏了及时报备哦？做新的符卡要时间的！」
+			PRINTFORML 「还有，如果有空的话，欢迎来找我啊！我不介意多个帮手，是吧？」
+			PRINTFORML 蓝大人向你挥了挥手。
+		ELSE
+			PRINTFORML 「你好！」
+			PRINTFORML 「无论去哪里都要注意安全！」
+		ENDIF
+		RETURN 1
+	ENDIF
+	;-------------------------------------------------
+	;他キャラとデート中に遭遇した
+	;ARG:1にデート相手
+	;記入チェック（=0, 非表示、1, 表示）
+	;这里会写一点对我帮助很大的国人作者喜欢的角色的
+	LOCAL:1 = 1
+	;-------------------------------------------------
+IF LOCAL:1 && ARG == 7
+	IF ARG : 1 == 26
+			IF TALENT:恋人
+				;紫様が恋慕持ち
+				IF TALENT:26:恋人
+					PRINTFORML 「阿拉，紫大人？你这是在和%CALLNAME:MASTER%约会吗？」
+					HTML_PRINT "<font color='#990066'>「蓝？我——没——想——到——你会在这里呢」</font>"
+					PRINTFORML 当然，在紫大人隙间的掌控中，这是不可能的呢
+					HTML_PRINT "<font color='#990066'>「阿啦,蓝～你难道要和我争抢%CALLNAME:MASTER%吗？作为式神真是好大的胆子呢～」</font>"
+					PRINTFORML 「%CALLNAME:MASTER%真是罪孽深重啊，竟然和我还有紫大人的关系都这么好啊」
+					PRINTFORML 「老实说，我和紫大人在床上的时候有时就会探讨%CALLNAME:MASTER%的事呢，告诉你哦，紫大人其实——啊！好痛！」
+					PRINTFORML 还没等蓝大人说完，紫大人就用隙间把扇子拍在了蓝的脑袋上。
+					PRINTFORML 「那么，属下就不打扰您和%CALLNAME:MASTER%的私人时光了」
+					PRINTFORML 蓝大人突然靠近你，在你和紫姐姐的耳边轻声细语
+					PRINTFORML 「我也在等着你和我的单独约会呢～」
+					HTML_PRINT "<font color='#990066'>「阿啦,你也要尽力满足蓝呢。」</font>"
+				ELSEIF TALENT:26:恋慕
+					SELECTCASE RAND:3
+						CASE 0
+							PRINTFORML 「紫大人。那个，和，%CALLNAME:MASTER%。。。」
+							PRINTFORML 「蓝有些尴尬，没有料想到竟然。。。」
+							PRINTFORMW 相互點點頭後、二人一起向這邊露出看似溫暖的笑容
+							HTML_PRINT "<font color='#990066'>「%CALLNAME:MASTER%真是有魅力呢。不仅是蓝的好朋友，竟然连她的主——人——也沦陷了啊」</font>"
+							PRINTFORMW 「其实紫大人也魅力非凡呢，竟然能勾——引——到%CALLNAME:MASTER%这么好的人。紫大人，属下就不打扰您的约会了」
+							PRINTFORMW 当然，蓝虽说有些抱怨，但还是用式神的力量告诉了紫%CALLNAME:MASTER%相关的信息了。
+							PRINTFORMW 在和紫姐姐在一起的这段时间里，你总感觉有一大团金色的毛茸茸在跟着自己。好像有一股熟悉的狐狸味
+						CASE 1
+							PRINTFORML 「正等着您呢、紫大人」
+							PRINTFORML %CALLNAME:MASTER%看到有什麼彈在紫的面前
+							PRINTFORMW 「紫大人？您在这里和我——的——%CALLNAME:MASTER%约会？我真是不胜荣幸呢？」
+							HTML_PRINT "<font color='#990066'>「唔——小紫紫好害怕啊！%CALLNAME:MASTER%？快来保护我吧？」</font>"
+							PRINTFORMW （紫大人您玩够了没有？？？用隙间把我叫过来就是做这种事情？）
+							HTML_PRINT "<font color='#990066'>「小紫紫被狐狸精坏姐姐欺负了呀。。。好过分的说。。。明明小紫只是个17岁的少女呢。」</font>"
+							PRINTFORMW 「紫大人？您在魅惑人这方面竟然想和狐仙竞争？您演的也太过了吧？其实我平时有在帮您做的工作的说」
+							PRINTFORMW 蓝实在是忍不下去了，开什么玩笑？要吐了！
+							HTML_PRINT "<font color='#990066'>「好了好了，晚上的时候不要放过%CALLNAME:MASTER%哦？我也会来帮你的！」</font>"
+							PRINTFORMW 「那么，没事的话属下先离开了？祝您一切顺利！」
+						CASE 2
+							PRINTFORML 正面襲來隙間的妖怪。背後則是朝%CALLNAME:MASTER%撲來九尾式神
+							PRINTFORML 「邪惡%CALLNAME:MASTER%。紫大人命令是最優先的」
+							PRINTFORMW 主從兩人玩得很開心的樣子……
+					ENDSELECT
+				ELSE
+					SELECTCASE RAND:3
+						CASE 0
+							PRINTFORML 「紫大人」
+							PRINTFORML 「……好的，明白了。像這樣那樣」
+							PRINTFORMW 那兩人不知道在說什麼、%CALLNAME:MASTER%從外面望著
+						CASE 1
+							PRINTFORML 「這樣那樣的事情可沒有。我可是紫大人的式神」
+							PRINTFORMW 再被藍跟紫戲弄著
+						CASE 2
+							PRINTFORML 「嘸，嘸。不讓我看。哦，到底是什麼呢」
+							PRINTFORMW 藍跟紫說著%CALLNAME:MASTER%各種糗事讓、感到無奈
+					ENDSELECT
+				ENDIF
+			ELSEIF TALENT:思慕
+				IF TALENT:26:恋人
+					PRINTFORML 「啊、紫大人。找我有事嗎」
+					PRINTFORMW 難得看到藍動搖的樣子
+					PRINTFORML 「那个。。。您的%CALLNAME:MASTER%和您。。。关系很好啊？」
+					PRINTFORML 蓝大人毕恭毕敬的对紫大人作揖，眼神止不住的看着你
+					HTML_PRINT "<font color='#990066'>「蓝？你不会是想要越界吧？」</font>"
+					HTML_PRINT "<font color='#990066'>「你好大的胆子！连主人的东西都敢抢！」</font>"
+					PRINTFORML 「是！对不起！」
+					PRINTFORML 你感觉蓝大人像是要哭了出来。但她还是在眼泪汪汪的看着你。
+					PRINTFORML 你感到蓝很可怜，想要劝下紫大人，但是紫大人给了你一个眼神。
+					PRINTFORML 接下来紫大人厉声训斥着蓝大人。你感到蓝大人眼泪都快流出来了
+					PRINTFORML 「唔。。。那要是没什么事情的话我就走了！」
+					PRINTFORML 你看着蓝大人匆匆离去的背影，低声问紫大人为什么要这么做。
+					HTML_PRINT "<font color='#990066'>「其实，我并不反对蓝和你的关系，即使作为你的恋人！（气鼓鼓的小紫）」</font>"
+					HTML_PRINT "<font color='#990066'>「但是，她不能这么得到你。她应该明白，主人的东西不可以拿！」</font>"
+					HTML_PRINT "<font color='#990066'>「好了！不说这些了！我们去那里逛逛吧？」</font>"
+					HTML_PRINT "<font color='#990066'>「要是你想要安慰她的话明天就去陪陪她吧？正好她休息呢」</font>"
+					HTML_PRINT "<font color='#990066'>「但是现在（紫大人抱住了你），你就是只属于我的哦？达——令！」</font>"
+					PRINTFORML 你大概明白其实这是紫在树立威严和对属于自己的恋人有一天会成为蓝的恋人的不满。
+					PRINTFORML 蓝大人这么可爱，还是明天去陪陪她吧？（隙间）小紫紫也很可爱哦！（隙间）
+				ELSEIF TALENT:26:恋慕
+					PRINTFORML 「啊？紫大人和%CALLNAME:MASTER%在约会？真是好巧啊紫大人！」
+					PRINTFORML 蓝暗地里感慨怎么没有早点下手，被紫大人捷足先登了。
+					HTML_PRINT "<font color='#990066'>「那个，蓝？」</font>"
+					HTML_PRINT "<font color='#990066'>你可以感受到蓝和紫的眼神有些不敢接触。</font>"
+					PRINTFORML 可恶！虽然说是紫大人！但是我也要得到！
+					PRINTFORML 「紫大人？那这样的话我就先走了？记得玩的开心哦？」
+					PRINTFORML 你发现紫大人和蓝大人都面有微红，一直的看着你。
+				ELSE
+					PRINTFORML 「紫大人你好！诶？%CALLNAME:MASTER%？你在这里干什么？」
+					PRINTFORML 「为什么紫大人在和约会？」
+					HTML_PRINT "<font color='#990066'>「蓝？我只是觉得很有趣啊？呼呼呼！」</font>"
+					HTML_PRINT "<font color='#990066'>「我要看看能让蓝这么朝思暮想的人究竟是什么样子呢？」</font>"
+					HTML_PRINT "<font color='#990066'>「毕——（可爱的伸舌头）！让我们去那里吧？」</font>"
+					PRINTFORML 蓝大人只是无聊的看着紫大人，她觉得肯定只是紫大人灵光一现而已，没再多管
+					PRINTFORML （是啊，这只是一种。。。额。。。参谋而已，并不会有什么大事的！）
+				ENDIF
+			ELSE 
+				IF TALENT:26:恋人
+					PRINTFORML 「啊！紫大人又在约会哦！」
+					PRINTFORML 「真的羡慕%CALLNAME:MASTER%呢！能拥有这么美丽的紫大人！」
+					HTML_PRINT "<font color='#990066'>「呼呼呼！小蓝蓝？给你介绍一下！这是我的恋人哦？呐%CALLNAME:MASTER%？这个九尾狐是小紫紫的式神哦？」</font>"
+					HTML_PRINT "<font color='#990066'>「是之前在畜生界的时候我降服的呢！怎么样？小紫可不可爱？qiu——！」</font>"
+					PRINTFORML 「拿要是没什么事情的话，我就先走了？你们慢慢玩吧！」
+					PRINTFORML 事实上，蓝感受到了一种震撼，使她想要离开这里。
+				ELSEIF TALENT:26:恋慕
+					PRINTFORML 「啊！%CALLNAME:MASTER%！没想到紫大人真的——啊好痛！」
+					PRINTFORML 一把扇子从隙间伸出，拍到了蓝大人的头上。
+					HTML_PRINT "<font color='#990066'>「说什么傻话呢蓝？（脸红）」</font>"
+					HTML_PRINT "<font color='#990066'>「之前才没有想着和%CALLNAME:MASTER%在一起呢！哼！」</font>"
+					PRINTFORML 「唔！那再见了紫大人！」
+					PRINTFORML 蓝抱着头跑开了
+				ELSE
+					PRINTFORML 「咦？紫大人和%CALLNAME:MASTER%？」
+					PRINTFORML （这个%CALLNAME:MASTER%真是疯了！竟然和紫大人在约会！）
+					PRINTFORML 「紫大人！那个%CALLNAME:MASTER%有什么好惦记的？和我说说话吧？」
+				ENDIF
+			ENDIF
+		ELSE
+			PRINTFORML 「紫大人。您在这里干什么呢？」
+			PRINTFORMW 藍的態度完全改變。展現對主人的忠誠跟敬意
+		ENDIF
+	
+	ELSEIF LOCAL:1 && ARG : 1 == 24
+		IF TALENT:恋慕
+			;橙が恋慕持ち
+			IF TALENT:24:恋慕
+				SELECTCASE RAND:3
+				CASE 0
+					PRINTFORML 「來吧、橙！」
+					PRINTFORMW 藍朝%CALLNAME:MASTER%笑了笑、抱著橙來回轉動著
+				CASE 1
+					PRINTFORML 「哎阿、橙。來得正好」
+					PRINTFORMW 橙跑向兩人之間開心的表示歡迎
+				CASE 2
+					PRINTFORML 「橙、在這喔」
+					PRINTFORMW 看著橙小跑得接近、%CALLNAME:MASTER%跟藍都笑了起來
+				ENDSELECT
+			ELSE
+				SELECTCASE RAND:3
+				CASE 0
+					PRINTFORML 「做、做什麼、橙？ 我什麼都沒做喔..」
+					PRINTFORMW 罕見的看到藍如此動搖
+				CASE 1
+					PRINTFORML 「什、怎麼會在這！？」
+					PRINTFORMW 忽然瞄到、橙朝這邊默默的注視著
+				CASE 2
+					PRINTFORML 「%CALLNAME:MASTER%。看那邊」
+					PRINTFORMW 橙對自己偷看被發現感到苦惱
+				ENDSELECT
+			ENDIF
+		ELSEIF TALENT:思慕
+			PRINTFORML 「哎呀，哎呀。怎麼了？、橙？」
+			PRINTFORMW 橙將藍的手緊緊抱住、濕漉漉的眼睛朝這盯著
+		ELSE
+			PRINTFORML 「噢、橙」
+			PRINTFORMW 藍將%CALLNAME:MASTER%放在一邊跟自己的式神說起話來
+		ENDIF
+	ELSEIF LOCAL:1 && ARG : 1 == 143
+			;饕餮撞车惨案
+			IF TALENT:恋人
+				IF TALENT : 143 : 恋人
+					SELECTCASE RAND:3
+					CASE 0
+						PRINTFORML 「饕餮？又在地上作恶？呦？这不是吗%CALLNAME:MASTER%？」
+						PRINTFORMW 咩？是九尾的式神啊！哇哇哇哇哇！
+						HTML_PRINT "<font color='#243BA3'>「库库库！（等等不对，这个声音是？）蓝？蓝！！！」</font>"
+						PRINTFORMW 饕餮把头埋在蓝的毛茸茸里，可是蓝没有阻拦
+						PRINTFORMW 「既然往事已经无法挽回了，饕餮？你要珍惜现在的恋人哦？」
+						PRINTFORMW （真的是，我也会感到有点嫉妒啊。。。）
+						PRINTFORMW 蓝大人责备你为什么这么花心，用柔软尾巴在你和饕餮的头上拍了拍
+						PRINTFORMW 「那么饕餮？祝你好运。%CALLNAME:MASTER%也别忘了来陪我哦？」
+					CASE 1
+						PRINTFORML 「哎阿、饕餮？看你的脸上十分的幸福嘛？」
+						HTML_PRINT "<font color='#243BA3'>「蓝？不是。。。我只是。。。」</font>"
+						PRINTFORMW 「现在还是这么的嘴硬吗？嗯？」
+						PRINTFORMW 饕餮害羞的把头低下来，蓝慢慢的靠近她。
+						PRINTFORMW 「好了～饕餮还是这么可爱啊，怪不得会吸引到%CALLNAME:MASTER%呢……」
+						PRINTFORMW 蓝抱住了饕餮
+						HTML_PRINT "<font color='#243BA3'>「蓝。。。」</font>"
+						HTML_PRINT "<font color='#243BA3'>「我。。。我。。。%CALLNAME:MASTER%。。。」</font>"
+						PRINTFORMW 「饕餮。。。我知道的？%CALLNAME:MASTER%也是我的恋人呢。」
+						PRINTFORMW 「尽情的享受幻想乡的日常吧？」
+					CASE 2
+						PRINTFORML 「饕餮？你这是？」
+						PRINTFORMW 蓝看到饕餮抱住了，嘟起嘴，可怜的看向蓝
+						HTML_PRINT "<font color='#243BA3'>「我。。。我不会放开%CALLNAME:MASTER%的！即使是蓝的！呜呜。。。我要吃掉%CALLNAME:MASTER%！」</font>"
+						HTML_PRINT "<font color='#243BA3'>「呐%CALLNAME:MASTER%？你不要离开我好不好？」</font>"
+						PRINTFORMW （饕餮好可爱呢，只是，她在畜生界的那些事。。。我一定要把你从那里带出来。。。）
+						PRINTFORMW 看著饕餮知道了什么是“要珍惜的事物”，蓝露出了欣慰的笑容。
+						PRINTFORMW 「好了～要是我真的想抢夺你——的——和我！的！%CALLNAME:MASTER%的话，你们已经打起来了不是？」
+						PRINTFORMW 「你要是早这样，我怎么会离开你呢？我好嫉妒，%CALLNAME:MASTER%竟然有这样的你。。。」
+					ENDSELECT
+				ELSEIF TALENT : 143 : 恋慕
+					SELECTCASE RAND:3
+					CASE 1 
+						PRINTFORMW 「饕餮？！你和%CALLNAME:MASTER%在一起？」
+						PRINTFORMW 「其实有点不好意思。。。是我的。。。恋人。。。」
+						PRINTFORMW 蓝有点扭扭捏捏的看着饕餮。
+						PRINTFORMW 「就是。。。我和你之前的那种关系。。。」
+						HTML_PRINT "<font color='#243BA3'>「蓝。。。我们。。。那，我和%CALLNAME:MASTER%。。。」</font>"
+						PRINTFORMW 「那个。。。饕餮？我看出来了哦？你对%CALLNAME:MASTER%的那种意思。。。」
+						PRINTFORMW 蓝大人弯下腰来，摸着饕餮的头发。你可以看到蓝大人的眼角有些湿润
+						PRINTFORMW （为什么！我要经历这种心如刀割的感觉！神明大人啊！！！）
+						PRINTFORMW 「你要是能把%CALLNAME:MASTER%搞到手，我没有意见的！毕竟，%CALLNAME:MASTER%可是个很好的人啊。。。」
+						HTML_PRINT "<font color='#243BA3'>「蓝。。。你原谅我了吗？」</font>"
+						PRINTFORMW 你看到蓝的目光坚定了起来，她转过身去，走远了几步。
+						PRINTFORMW 「原谅？饕餮，你做错了什么？」
+						HTML_PRINT "<font color='#243BA3'>「蓝。。。我杀了很多人啊。。。我。。。我奴役了很多人类灵。。。」</font>"
+						PRINTFORMW 「%CALLNAME:MASTER%？饕餮？你们要记住，治理人类有治理人类的方法，治理畜生也有治理畜生的方法，仓廪实而知礼节，教然后知不足」
+						PRINTFORMW 「我们这种黑帮式的方法固然是无理的，但是，要不是地狱抛下我们不管，我们还会做出这些事吗？人类要不是换了信仰，我们又怎么会到这畜生界来？战神阁下？」
+						PRINTFORMW 蓝大人愤怒的看向了饕餮，这是战友的眼神。
+						PRINTFORMW 「呜呼哀哉！圣德之天马也堕落矣！龙的儿子们互相杀戮哉！」
+						PRINTFORMW 「灵梦都杀死过很多人，饕餮，那些人算得了什么呢？」
+						PRINTFORMW 「邪神的人类灵想要把我们的部下屠戮，把我们赶出属于我们的土地！我们只是在保护他们吧？凭什么她就能以暴制暴？！」
+						HTML_PRINT "<font color='#243BA3'>饕餮其实很聪明，她知道蓝大人想干什么</font>"
+						HTML_PRINT "<font color='#243BA3'>「蓝。。。我不同意！你诱惑了你的国君！你的家乡因你而遭饥饿和战火！」</font>"
+						HTML_PRINT "<font color='#243BA3'>「我不分是非吞噬完了整个敌对部落，无论妇孺老幼！是族人们害怕我！」</font>"
+						HTML_PRINT "<font color='#243BA3'>「也许，那个大妈是正确的，要想制服畜生，就要以畜生之道。。。」</font>"
+						HTML_PRINT "<font color='#243BA3'>「地狱也曾经努力过，想要改变这一切。。。她们努力过了。。。但是，谁叫我们是畜生呢。。。」</font>"
+						PRINTFORMW 蓝大人明白了：饕餮也知道了畜生的智慧，畜生也有知性。她笑了出来，转过身来。
+						PRINTFORMW 「这样，我就可以把%CALLNAME:MASTER%放心的交给你了！但是，饕餮？不要因你做过的事而自责哦？」
+						PRINTFORMW 「畜生也有畜生的道啊。。。这样的道，不能算错，而且，还挺好用的，不是吗？」
+					CASE 2
+						PRINTFORMW 「饕餮。。。」
+						PRINTFORMW 「明明。。。是我先来的。。。」
+						PRINTFORMW 「为什么在这个时候又要把我的给夺去了呢？」
+						PRINTFORMW 「你上次就伤害了我，这次难道还想要刺痛我的心吗？」
+						PRINTFORMW 你听不出蓝的声音里有什么怨恨，反而是一种哭诉，她无法理解为什么她遇到了这样的感情问题。。。
+						PRINTFORMW 蓝悲愤的看着饕餮。。。眼泪止不住的往下流。。。
+						HTML_PRINT "<font color='#243BA3'>「蓝！（饕餮慌张的看着你）蓝！你别哭了！我！我只是——」</font>"
+						PRINTFORMW 「你只是什么！为什么我会遇到这样啊！！！」
+						PRINTFORMW 蓝蹲下来开始大哭，引来很多人围观
+						HTML_PRINT "<font color='#243BA3'>「蓝你也搞得我好难受啊。。。我。。。我。。。咩！！！！」</font>"
+						PRINTFORMW 「你快把饕餮带走啊！我一个人一会儿就好了！」
+					CASE 3
+						HTML_PRINT "<font color='#243BA3'>「咦！前面是蓝！我们从那边的巷子里穿过去吧！」</font>"
+						HTML_PRINT "<font color='#243BA3'>饕餮匆忙的拉着你往一旁的巷子里拽</font>"
+						HTML_PRINT "<font color='#243BA3'>「咩！不要问为什么啊！快走快走！」</font>"
+						PRINTFORMW （这一对真是俩活宝啊！讲真，我觉得事情好复杂啊！）
+						PRINTFORMW 「饕餮！别想逃！」
+						PRINTFORMW 蓝大人把小羊给提了起来
+						HTML_PRINT "<font color='#243BA3'>「咩！咩！！！！！蓝你别这样啊！」</font>"
+						HTML_PRINT "<font color='#243BA3'>「蓝！（小短腿用力扑腾）我已经失去了你了！我看到了%CALLNAME:MASTER%后想要一段新的恋情啊！」</font>"
+						HTML_PRINT "<font color='#243BA3'>「我。。。（小短腿小范围扑腾）我爱你的%CALLNAME:MASTER%。。。即使是你的。。。」</font>"
+						PRINTFORMW 蓝大人顿时有点怔住了，她不知道应该做些什么。。。
+						PRINTFORMW 蓝放开了饕餮，饕餮扑在了蓝的怀抱里。
+						HTML_PRINT "<font color='#243BA3'>「蓝。。。你能理解的吧？我爱%CALLNAME:MASTER%，就像我爱你一样。。。你也爱%CALLNAME:MASTER%。。。」</font>"
+						HTML_PRINT "<font color='#243BA3'>「蓝——（带有哭腔）满足我好吗？求你了！」</font>"
+					ENDSELECT
+				ELSEIF TALENT : 143 : 思慕
+					PRINTFORMW 「那个。。。饕餮？我最近感觉你和我的恋人走的比较近啊？你难道对%CALLNAME:MASTER%有意思吗？」
+					PRINTFORMW 「怎么了饕餮？是不是吃坏肚子了？我就说你没我不行的嘛！跑去喝石油干什么啊！」
+					PRINTFORMW 饕餮解释道不是有意思，只是觉得他好吃而已
+					PRINTFORMW 「你这种事还想瞒得过九尾狐？你当时也是这么和我说的啊。。。」
+					PRINTFORMW 「嘛嘛，罢了罢了，你们慢慢聊就是了。还有，饕餮酱可不许再随意咬人了哦！」
+				ELSE 
+					PRINTFORMW 「咦？饕餮？你知不知道他是我的恋人呢？」
+					PRINTFORMW 「嘛算了，祝你们俩玩的开心！%CALLNAME:MASTER%！饕餮吃东西吃的还是很多的！要准备好哦！看着她！不要让她连盆都一起吃了！」
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 143 : 恋人
+					PRINTFORMW 「饕餮？你和在约会吗？」
+					PRINTFORMW 蓝有些震惊了，自己爱的两个人竟然在一起了？
+					PRINTFORMW 「那个。。。不是。。。这。。。」
+					PRINTFORMW 「原来是这样啊。。。」
+					HTML_PRINT "<font color='#243BA3'>「蓝——（带有哭腔）我己经失去了你。。。我会好好珍惜的！」</font>"
+					HTML_PRINT "<font color='#243BA3'>饕餮强力的抱住了你。你看到饕餮仰视着你，脸气鼓鼓的，眼泪花花的看着你</font>"
+					PRINTFORMW 「那个。。。对不起！我在你的面前露出了这一面！」
+					PRINTFORMW 蓝大人感到莫名的想哭，但还是忍住了泪水。
+				ELSEIF TALENT : 143 : 恋慕
+					PRINTFORMW 「你也很喜欢吗？饕餮？」
+					PRINTFORMW 蓝大人露出了释怀的笑容。
+					PRINTFORMW 「毕竟，这个泡茶付丧神谁也无法抵御呢！」
+					PRINTFORMW 「但是，饕餮不会忘了我是九尾狐了吧？」
+					PRINTFORMW 「我会比你先拿到手的！」
+				ELSE 
+					PRINTFORMW 「饕餮和%CALLNAME:MASTER%？这是为什么？」
+					PRINTFORMW 「饕餮！你想干什么吗？我也认识%CALLNAME:MASTER%哦？你不会是想在地上对%CALLNAME:MASTER%作恶吧？」
+					PRINTFORMW 「算了，不是就好！要是我发现你有类似的行为的话，我就把你治退了哦？」
+					PRINTFORMW 「%CALLNAME:MASTER%？她吃饭的时间耗的很长的，你多包涵一下。去饭店吃饭的话报八云家的名号就好了！不用你掏钱的说！」
+				ENDIF
+			ELSE
+				IF TALENT : 143 : 恋人
+					PRINTFORMW 「啊呀？饕餮酱的新欢啊？真是忘了旧的糟糠了？」
+					PRINTFORMW 「那个人茶是很好喝啦。。。但是饕餮竟然不来找我了。。。」
+					PRINTFORMW 「唔姆！我生气了哦？」
+				ELSEIF TALENT : 143 : 恋慕
+					PRINTFORMW 「饕餮？我看你最近对%CALLNAME:MASTER%有点意思啊？」
+					PRINTFORMW 「真是的！mo！」
+					PRINTFORMW 「也来看看我嘛！」
+				ELSE
+					PRINTFORMW 「阿拉！饕餮酱和%CALLNAME:MASTER%？真是奇怪的组合呢？」
+					PRINTFORMW 「%CALLNAME:MASTER%？看来你要破费一次了！哈哈哈！」
+					PRINTFORMW 「放心好了～你们二人绝不会让我日后头疼的！」
+				ENDIF
+			ENDIF
+	ELSEIF ARG : 1 == 60
+			IF TALENT:恋人
+				IF TALENT : 60 : 恋人
+					PRINTFORMW 「咦？地下的桥姬和%CALLNAME:MASTER%？」
+					PRINTFORMW 「真是奇遇啊？」
+					HTML_PRINT "<font color='#28713E'>「咕！我好嫉妒啊！竟然我遇到了的另一个女友！」</font>"
+					PRINTFORMW 「诶？你真正应该嫉妒的该是我这么好的身材，你说是吧？」
+					HTML_PRINT "<font color='#28713E'>「%CALLNAME:MASTER%！你看！魅惑人的狐狸精！」</font>"
+					PRINTFORMW 蓝大人得意的撑起了自己的欧派，桥姬气的在一旁咬手指。
+					PRINTFORMW 「%CALLNAME:MASTER%？哎呀呀～真是罪孽啊～」
+				ELSEIF TALENT : 60 : 恋慕
+					PRINTFORMW 「啊！奇遇啊%CALLNAME:MASTER%！你身边的可是地下的桥姬？」
+					PRINTFORMW 蓝大人看到了羞涩的抱住你的胳膊的水桥。
+					PRINTFORMW 「你们好？或者说，你好？我的爱人？桥姬在历史记载中就会诱拐人呢？这次会不会不成功就要把%CALLNAME:MASTER%拖进河里啊？」
+					HTML_PRINT "<font color='#28713E'>「嗯！！！这个！！！我好酸！！！」</font>"
+					HTML_PRINT "<font color='#28713E'>桥姬的眼睛里散发出绿光，直勾勾的盯着蓝大人。</font>"
+					PRINTFORMW 「哎呀呀～水桥和%CALLNAME:MASTER%，多么美妙的相遇啊？」
+					PRINTFORMW 蓝大人箭步上前，把你埋在了自己的欧派里。
+					PRINTFORMW 「哎呀！真乖真乖！诶？水桥小姐，你的眼里的绿光有多少流明啊？闪死我了！」
+					PRINTFORMW 「（悄悄地）%CALLNAME:MASTER%？你要是喜欢这样的女孩的话不要欲擒故纵哦？我不想到三途川找你！」
+					PRINTFORMW 「为什么我不生气呢？因为我知道自己的魅力一定比她高呢～好好玩（掐你的腰）！晚上再找你算账！」
+				ELSE 
+					PRINTFORMW 「啊！水桥小姐和%CALLNAME:MASTER%！你们好！这边有礼了！」
+					HTML_PRINT "<font color='#28713E'>「这是你的恋人吧？我好嫉妒啊竟然能在这里遇到你的恋人啊？」</font>"
+					HTML_PRINT "<font color='#28713E'>桥姬有些愤怒的看着你，抱怨你的花心。</font>"
+					PRINTFORMW 「其实也没什么啦？毕竟我可是正宫呢？是吧%CALLNAME:MASTER%？」
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 60 : 恋人
+					PRINTFORMW 「水桥小姐和%CALLNAME:MASTER%。。。」
+					PRINTFORMW 「你好？真是巧遇啊！」
+					HTML_PRINT "<font color='#28713E'>「地上的狐狸精QAQ！不行！%CALLNAME:MASTER%你不许和她说话！」</font>"
+					PRINTFORMW 「%CALLNAME:MASTER%？有时间的话也要记得和我在一起哦？」
+					PRINTFORMW 「毕竟，有些事情还是我比较的擅长呢～」
+					HTML_PRINT "<font color='#28713E'>「你！！！帕露！你竟然！」</font>"
+					PRINTFORMW （即使是地狱的人的恋人我也要夺过来！）
+				ELSEIF TALENT : 60 : 恋慕
+					PRINTFORMW 「啊%CALLNAME:MASTER%。。。你也来到了这里啊？这位是桥姬殿下吧？」
+					HTML_PRINT "<font color='#28713E'>（不好！这只狐狸貌似也对%CALLNAME:MASTER%有好感！）</font>"
+					HTML_PRINT "<font color='#28713E'>「%CALLNAME:MASTER%！我们去那边！不然我就扎小人诅咒你！」</font>"
+					PRINTFORMW 「哼！走着瞧！我这次只不过是怕打扰了地狱和幻想乡的关系而已！你不过就是这次得逞了罢了！」
+					PRINTFORMW （是桥姬的能力发动了吗？我也有些嫉妒了呢。。。）
+					PRINTFORMW （绝对不能让她先抢到！我可是狐妖啊！）
+				ELSE 
+					PRINTFORMW 「%CALLNAME:MASTER%？你和地下的桥姬在约会吗？」 
+					HTML_PRINT "<font color='#28713E'>（这只狐狸对%CALLNAME:MASTER%有好感！）</font>"
+					HTML_PRINT "<font color='#28713E'>「阿拉？我好嫉妒啊（棒读）竟然你心爱的%CALLNAME:MASTER%和我在约会啊？」</font>"
+					HTML_PRINT "<font color='#28713E'>「你还是不是狐狸精了啊？」</font>"
+					PRINTFORMW 「咕！这不过。。。哼！（跺脚脚）%CALLNAME:MASTER%！为什么不来找我？」 
+				ENDIF
+			ELSE 
+				IF TALENT : 60 : 恋人
+					PRINTFORMW 「两位好恩爱啊！真好啊！」
+					HTML_PRINT "<font color='#28713E'>「呐呐呐！我好嫉妒啊（开心）！蓝看到了我们哦？」</font>"
+					PRINTFORMW 「哈！二位，好好玩哦？」
+				ELSEIF TALENT : 60 : 恋慕
+					HTML_PRINT "<font color='#28713E'>「啊。。。蓝，你好！（抱紧你）」</font>"
+					PRINTFORMW 「桥姬你可真是可爱啊！想必也会很喜欢你的吧？」
+					PRINTFORMW 「呐？桥姬可是很专情的哦？要是不想被桥姬拉到水里当怨灵就老老实实接受桥姬的爱吧？」
+					HTML_PRINT "<font color='#28713E'>「蓝。。。我好嫉妒啊？蓝对我可了解的真深刻啊？」</font>"
+				ELSE 
+					PRINTFORMW 「那个？你身为幻想入的人类，最好还是不要和地狱的人接触的太近吧？」
+					HTML_PRINT "<font color='#28713E'>（什么嘛！我还是期待着一份邂逅的！）</font>"
+				ENDIF
+			ENDIF
+	ELSEIF ARG : 1 == 139
+			IF TALENT:恋人
+				IF TALENT : 139 : 恋人
+					PRINTFORMW 「管狐阁下！」
+					HTML_PRINT "<font color='#F7FF54'>「KON！！！————哇哇哇！是九尾狐啊！！！（尾巴竖起来，毛炸起来了）」</font>"
+					PRINTFORMW 「KON！————你叫这么大声干什么嘛？吓死我了！（9条尾巴竖起来了）」
+					HTML_PRINT "<font color='#F7FF54'>「KON！！！————蓝大人您的表情好可怕啊！！！（尾巴更炸了）」</font>"
+					PRINTFORMW 你打断了她们俩自己吓自己的诡异过程。。。
+					PRINTFORMW 「KON！————都怪你这么花心！（尾巴攻击）」
+					HTML_PRINT "<font color='#F7FF54'>「KON！！！————是啊是啊———（尾巴攻击）」</font>"
+					PRINTFORMW 「（抱紧你的胳膊）呐？那么我们去约会吧？」
+					HTML_PRINT "<font color='#F7FF54'>「kon！蓝大人好坏啊！（夹住另一条胳膊）！%CALLNAME:MASTER%阁下快点走了！」</font>"
+					PRINTFORMW 「两位好好玩哦？萝莉控阁下%CALLNAME:MASTER%（狐窗手）！晚上再找你算账！让你见识下成熟狐妖的魅力！」
+				ELSEIF TALENT : 139 : 恋慕
+					PRINTFORMW 「菅！牧！典！」
+					PRINTFORMW 「你好大的胆子啊！我的人你都敢抢！」
+					HTML_PRINT "<font color='#F7FF54'>「KON！！！蓝大人放过我吧！」</font>"
+					HTML_PRINT "<font color='#F7FF54'>「%CALLNAME:MASTER%！饭纲丸大人！救我啊！」</font>"
+					PRINTFORMW 你劝说着蓝不要欺负小管狐了，因为她真的很可爱。
+					PRINTFORMW 「哼！这次是看在%CALLNAME:MASTER%的份上才不和你计较的！」
+					PRINTFORMW 「要是再有下次！我就直接把你送去畜生界当饕餮的代餐！」
+				ELSE 
+					PRINTFORMW 「你这管狐！和%CALLNAME:MASTER%约会干什么了？」
+					PRINTFORMW （为什么%CALLNAME:MASTER%和小典走在一起？）
+					HTML_PRINT "<font color='#F7FF54'>「蓝大人？我并没有想干什么事哦？向苏妲己发誓！大誓言！」</font>"
+					PRINTFORMW 「唔。。。好吧？没必要发这么重的誓言吧？」
+					PRINTFORMW 「话说典酱，最近饕餮有没有找你的麻烦？」
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 139 : 恋人
+					PRINTFORMW 「%CALLNAME:MASTER%和你的小情人约会啊？」
+					PRINTFORMW （我也喜欢上了%CALLNAME:MASTER%！这个人又是典的情人！好麻烦啊！！！）
+					PRINTFORMW 「其实。。。我现在没有事情干哦？要不。。。一起吧？」
+					HTML_PRINT "<font color='#F7FF54'>「蓝！大！人！是我的恋人！」</font>"
+					PRINTFORMW 「嗯？！小管狐～你也不想经历些不好的事情吧～？」
+					HTML_PRINT "<font color='#F7FF54'>「咦咦咦咦咦！！！饭纲丸大人救我啊！！！！」</font>"
+					PRINTFORMW 你及时制止了这场闹剧，告诉蓝自己是典的恋人」
+					PRINTFORMW 「哼！萝莉控%CALLNAME:MASTER%！萝莉控%CALLNAME:MASTER%！也来陪陪我嘛～」
+				ELSEIF TALENT : 139 : 恋慕
+					PRINTFORMW （不好！被管狐抢了一个先手！）
+					PRINTFORMW 「那个%CALLNAME:MASTER%。。。？你也不想让别人知道你是萝莉控吧？那么快点不要管管狐了，和我约会吧？」
+					HTML_PRINT "<font color='#F7FF54'>「咦！蓝大人欺负人！」</font>"
+					PRINTFORMW 「错误的，并非是人，kon——！」
+					HTML_PRINT "<font color='#F7FF54'>「蓝大人！」</font>"
+					HTML_PRINT "<font color='#F7FF54'>（蓝大人也喜欢上了！这可不行！我要赶紧走开！相信我！我可是狐狸啊！）</font>"
+					PRINTFORMW 「你的下一句话是： 我们赶快走吧？我知道有一家的麦饭做的很好吃哦？」
+					HTML_PRINT "<font color='#F7FF54'>「我们赶快走吧？我知道有一家的麦饭做的很好吃哦——啊啊啊啊啊啊！！！」</font>"
+					PRINTFORMW 「哼！我也是狐狸啊！这次只是被你抢了个先手而已！最后的胜利一定是我的！」
+				ELSE 
+					HTML_PRINT "<font color='#F7FF54'>「咦？（耳边低语）呐呐呐%CALLNAME:MASTER%？我们走那边吧？绝对不是我害怕蓝大人哦？」</font>"
+					HTML_PRINT "<font color='#F7FF54'>「你看我干什么？真不害怕！」</font>"
+					HTML_PRINT "<font color='#F7FF54'>「那个。。。我们走那里吧？前面有蓝大人我害怕。。。」</font>"
+					PRINTFORMW （这个管狐！莫非是想要夺走%CALLNAME:MASTER%的心吗？）
+					PRINTFORMW （用我的式来分析一下，结合400年来9428只管狐的行为，感觉这就只是日常行为而已）
+					PRINTFORMW （罢了，应该是我过虑了，真是的！这个人总是让我心神不宁。。。）
+				ENDIF
+			ELSE 
+				IF TALENT : 139 : 恋人
+					PRINTFORMW 「啊！小典典？你好啊？」
+					HTML_PRINT "<font color='#F7FF54'>「蓝大人！你看！这是我的恋人哦？（摇尾巴）」</font>"
+					PRINTFORMW 「啊拉啊拉？真是可爱的一对呢！」
+					PRINTFORMW 蓝大人突然脸色一变，向你和典的身后指过去。
+					PRINTFORMW 「啊！饕餮！」
+					HTML_PRINT "<font color='#F7FF54'>「啊啊啊啊啊啊啊！！！（狐狸弓腰猛跳，尾巴炸起来）不要啊！！！我不是蓝啊！！！」</font>"
+					HTML_PRINT "<font color='#F7FF54'>「诶？她在哪里啊？」</font>"
+					PRINTFORMW 蓝大人矫捷的一笑。
+					PRINTFORMW 「骗你们的！KON——！好不好玩？」
+					HTML_PRINT "<font color='#F7FF54'>「蓝大人！」</font>"
+				ELSEIF TALENT : 139 : 恋慕
+					PRINTFORMW 蓝大人看到你和典走过来，首先向你们行了个礼。
+					PRINTFORMW 「二位好？原来%CALLNAME:MASTER%很喜欢狐狸啊？」
+					PRINTFORMW 「但是，其实小狐狸很喜欢你呢？」
+					HTML_PRINT "<font color='#F7FF54'>「蓝大人！（脸红）」</font>"
+					PRINTFORMW 「嗯？饭纲%CALLNAME:MASTER%大权现大天狗阁下？希望以后能这么戏谑你呢？」
+				ELSE 
+					PRINTFORMW 「请好好走路啊典！」
+					HTML_PRINT "<font color='#F7FF54'>「蓝大人好！」</font>"
+					PRINTFORMW 你向蓝大人致以诚挚的问候。
+					PRINTFORMW 「啊！这边也有礼了！那么请二位在幻想乡中好好玩啊！」
+				ENDIF
+			ENDIF
+	ELSEIF ARG : 1 == 140
+			IF TALENT:恋人
+				IF TALENT : 140 : 恋人
+					PRINTFORMW 「啊呀呀——啊呀呦？」
+					HTML_PRINT "<font color='#0000D2'>「啊呀？啊呀呀？」</font>"
+					PRINTFORMW 你疑惑不解，她们究竟是在说什么？
+					PRINTFORMW 「我在说文文语哦？啊呀呀！啊呀呀！」
+					HTML_PRINT "<font color='#0000D2'>「啊呀呀。。。」</font>"
+					PRINTFORMW 你夸赞饭纲丸大人真厉害，竟然知道鸦天狗的语言
+					HTML_PRINT "<font color='#0000D2'>「其实我并不知道她在说什么。。。啊呀啊呀？我怎么不知道鸦天狗有自己的语言啊？」</font>"
+					PRINTFORMW 「啊呀呀！要不让我来陪%CALLNAME:MASTER%约会吧？」
+					HTML_PRINT "<font color='#0000D2'>「闭嘴射命丸文！%CALLNAME:MASTER%现在在和我约会！你难道没有自己的事情要干嘛？！」</font>"
+					PRINTFORMW 「是：‘闭嘴八云蓝’哦？你的饭纲丸语说的很不错啊？」
+					HTML_PRINT "<font color='#0000D2'>「闭嘴射命丸文！不是，闭嘴八云蓝！」</font>"
+					
+				ELSEIF TALENT : 140 : 恋慕
+					PRINTFORMW 「啊呀呦！竟然饭纲丸大人和自己喜欢的人在一起约会了啊？」
+					HTML_PRINT "<font color='#0000D2'>「啊哈。。。这个。。。」</font>"
+					PRINTFORMW 「%CALLNAME:MASTER%是我的恋人哦？大天狗阁下竟然在诱捕我的人？这我可不能当作没看到呢？」
+					HTML_PRINT "<font color='#0000D2'>「（小声）谁叫你的%CALLNAME:MASTER%这么的优秀呢。。。」</font>"
+					PRINTFORMW 「啊呀呀～我听到了哦？嗯～罢了罢了，我是不介意的，因为也是%CALLNAME:MASTER%花心的错呢？」
+					PRINTFORMW 「不过今晚，我就要和%CALLNAME:MASTER%一起共度良宵了～希望你能记住哦？」
+				ELSE 
+					PRINTFORMW 「%CALLNAME:MASTER%！又在沾花惹草！这次怎么搅到大天狗了！」
+					PRINTFORMW 「%CALLNAME:MASTER%不知道天狗的关系很复杂吗？要是引起什么事该怎么办？」
+					PRINTFORMW 「（小声）不过这孩子在诱惑方面虽然天赋很高，但还是差点火候啊。。。」
+					HTML_PRINT "<font color='#0000D2'>「好了，好了，我只是陪%CALLNAME:MASTER%在到处逛逛而已，不会有什么事的！你大可安心！」</font>"
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 140 : 恋人
+					PRINTFORMW 「龙大人！你在和你的恋人约会的啊！」
+					HTML_PRINT "<font color='#0000D2'>「嗯！式神大人您好！」</font>"
+					PRINTFORMW （切！不管怎么说，我都要把那个龙的恋人抢到！我可是九尾狐啊！不可能做不到的！）
+					PRINTFORMW 「龙大人，话说最近我们听说天狗们又在到处劫掠小孩啊？我们可是在幻想乡成立不久就做过不能劫掠的约定吗？」
+					HTML_PRINT "<font color='#0000D2'>「（疑惑）怎么可能！我们都是很严格的管控的！」</font>"
+					HTML_PRINT "<font color='#0000D2'>「虽然我现在很想回去查一下此事，但是毕竟是在和 在一起，我也不想离开了呢。。。」</font>"
+					PRINTFORMW （啊啊啊啊啊啊啊啊啊！！！！！这就是爱情的力量吗！！！！说实话我也是被 搅得心神不宁无法工作了啊。。。。）
+				ELSEIF TALENT : 140 : 恋慕
+					PRINTFORMW （为了幻想乡的稳定与安全，这里就先暂时撤退！）
+					PRINTFORMW （我可没有输，我可是帝王啊！暂时的撤退不能叫做失败！）
+					PRINTFORMW （接下来就用我的绯红之王的能力来。。。不对我没有绯红之王。。。）
+					HTML_PRINT "<font color='#0000D2'>「话说你看远处的蓝大人为什么脸上的表情这么的jo（应该是gio）啊？」</font>"
+					HTML_PRINT "<font color='#0000D2'>「嗯。。。算了不管了。。。」</font>"
+				ELSE 
+					PRINTFORMW 「这次是想要攻略大天狗吗？」
+					PRINTFORMW 「嘛～先有理论再有实战的说！先过来和我约会嘛～我来教教你怎么做吧？」
+					PRINTFORMW 「更过分一点的事也是可以的哦？」
+				ENDIF
+			ELSE 
+				IF TALENT : 140 : 恋人
+					PRINTFORMW 「两位真是恩爱呢！究竟是大天狗吃掉了人还是人吃掉了大天狗啊？」
+					PRINTFORMW 「我可以说天狗大人的捕猎失败了吧？自己倒是成了猎物啊？」
+				ELSEIF TALENT : 140 : 恋慕
+					PRINTFORMW 「啊呀呀～天狗的首领哦？您这是干什么啊？为什么见到了我以后那含情脉脉的眼神在躲闪呢～」
+					PRINTFORMW 「饭纲丸大人哦？拐走人类的时候别被人类拐跑了哦？」
+				ELSE 
+					PRINTFORMW 「你这色虫！和大天狗约会干什么了！」
+					PRINTFORMW 「饭纲丸大人可是极其有魅惑力的呢，小心你的心别被饭纲丸大人拐跑了哦？」
+				ENDIF
+			ENDIF
+	;说实话龙的我是不大想写的，因为我觉得没啥交集，没啥必要写。但我还是试着写一下吧，惊喜嘛不是？
+	ELSEIF ARG : 1 == 112
+			IF TALENT:恋人
+				IF TALENT : 112 : 恋人
+					HTML_PRINT "<font color='#EA924C'>「啊！小蓝！你好啊！」</font>"
+					PRINTFORMW 「哦！纯狐姐姐！你好你好！」
+					PRINTFORMW 「那你们慢慢聊着？%CALLNAME:MASTER%？可不许惹纯狐妈妈生气哦？」
+					HTML_PRINT "<font color='#EA924C'>「蓝！你这是什么意思！」</font>"
+					PRINTFORMW 「KON——！想必%CALLNAME:MASTER%应该不会介意的吧？」
+					HTML_PRINT "<font color='#EA924C'>「其实这也是在说你自己老哦？我才没有这么老呢不是？呐%CALLNAME:MASTER%？是不是啊？」</font>"
+					PRINTFORMW 这两只老狐狸真的哪一个都不好惹啊。。。
+					HTML_PRINT "<font color='#EA924C'>（domo！（纯狐探头）小正太和小可爱们～屏幕前的你要记住纯狐氏是图腾是九尾狐的家族，而非狐狸哦？）</font>"
+					HTML_PRINT "<font color='#EA924C'>（你们也不许对长辈说我老哦？不然我就诅咒你永远也进不了幻想乡！）</font>"
+					HTML_PRINT "<font color='#990066'>（没错没错～（摇手手）小紫紫还很年轻的啦～说我老的话我就让你进不了幻想乡哦～）</font>"
+				ELSEIF TALENT : 112 : 恋慕
+					PRINTFORMW 「怎么说啊姐姐？想给封伯找个后爸吗？那我祝你未来不是寡妇？」
+					HTML_PRINT "<font color='#EA924C'>「蓝！你的嘴怎么还和以前一样刻薄啊？！再这样下去的话姐姐要生气了哦？」</font>"
+					PRINTFORMW 「纯狐姐姐！%CALLNAME:MASTER%是我的恋人！你为什么和%CALLNAME:MASTER%在一起？还不是你在%CALLNAME:MASTER%面前装的可怜兮兮的！」
+					PRINTFORMW 「%CALLNAME:MASTER%？！快过来啊！和小蓝蓝在一起不好吗？」
+					HTML_PRINT "<font color='#EA924C'>「蓝妹妹～我这可是凭借着自己的魅力获取的哦？」</font>"
+					PRINTFORMW 「哼！您的魅力真的很高呢～不然怎么被羿大人给拐了去呢？我很担心我会不会和羿一个下场啊～」
+					HTML_PRINT "<font color='#EA924C'>「蓝！多嘴！我生气了！」</font>"
+				ELSE 
+					PRINTFORMW 「啊！纯狐姐姐。。。和我的%CALLNAME:MASTER%。。。？」
+					PRINTFORMW 「姐姐！姐姐！你怎么和%CALLNAME:MASTER%在一起啊？」
+					HTML_PRINT "<font color='#EA924C'>「蓝。。。你的%CALLNAME:MASTER%是个好人呢。。。愿意来陪我。。。」</font>"
+					HTML_PRINT "<font color='#EA924C'>「那个%CALLNAME:MASTER%，我这还有几条内裤你想要吗？我都给你，求求你了陪陪我嘛～」</font>"
+					PRINTFORMW 「姐姐！姐姐你何必这样啊！这个色鬼！%CALLNAME:MASTER%！你今天不许回去了！给我陪着纯狐姐！晚上我在你家门口堵你！你不许回家！」
+					HTML_PRINT "<font color='#EA924C'>「拜托了，我真的好寂寞啊。。。」</font>"
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 112 : 恋人
+					PRINTFORMW 「纯狐姐姐。。。」
+					PRINTFORMW 「你的恋人%CALLNAME:MASTER%。。。真的好可爱。。。」
+					HTML_PRINT "<font color='#EA924C'>「小蓝？（笑）你真的很可爱啊？」</font>"
+					HTML_PRINT "<font color='#EA924C'>「姐姐下一次就会给你玩玩哦？想必%CALLNAME:MASTER%不会介意的吧？」</font>"
+					PRINTFORMW 「你别这么说嘛。。。」
+					HTML_PRINT "<font color='#EA924C'>「那么你觉得我会给你我的恋人吗？」</font>"
+					PRINTFORMW 「哼！%CALLNAME:MASTER%！这个女人曾经杀了自己的丈夫！你也要小心点别被杀了哦？」
+					HTML_PRINT "<font color='#EA924C'>「蓝！」</font>"
+				ELSEIF TALENT : 112 : 恋慕
+					PRINTFORMW 「纯狐姐？」
+					PRINTFORMW （被抢先了一步！可恶！）
+					HTML_PRINT "<font color='#EA924C'>「蓝。。。」</font>"
+					HTML_PRINT "<font color='#EA924C'>（原来小蓝也对%CALLNAME:MASTER%有心思！这可不大行！）</font>"
+					PRINTFORMW 「纯狐姐？您这么一大把年纪了，还在外面走，不怕受凉吗～快些回去吧？%CALLNAME:MASTER%就由我来送回家吧？」
+					HTML_PRINT "<font color='#EA924C'>「诶～你这么大岁数了还在外边当式神，放着自己的工作不做真的好吗？快些去做工作吧？」</font>"
+					HTML_PRINT "<font color='#EA924C'>「%CALLNAME:MASTER%？我们走吧～」</font>"
+				ELSE 
+				ENDIF
+			ELSE 
+				IF TALENT : 112 : 恋人
+					PRINTFORMW 「你们真是恩爱啊？」
+					PRINTFORMW 「纯狐姐，恭喜你了！」
+					PRINTFORMW 「祝两位玩好哦？」
+				ELSEIF TALENT : 112 : 恋慕
+					PRINTFORMW 「上啊上啊纯狐姐！把%CALLNAME:MASTER%拿下！」
+					PRINTFORMW 「必拿下！」
+				ELSE 
+					PRINTFORMW 「嗯？纯狐姐？难得来幻想乡一趟啊？」
+					PRINTFORMW 「您竟然这么潮流啊～还在和漂亮的%CALLNAME:MASTER%一起约会～」
+				ENDIF
+			ENDIF
+	ELSEIF ARG : 1 == 1
+			IF TALENT:恋人
+				IF TALENT : 1 : 恋人
+					PRINTFORMW 「嗯？灵梦酱工作真是用心呢！还在这里陪恋人压马路来陶冶情操，加强幻想乡治理呢？」
+					PRINTFORMW 「真是敬业的巫女啊？这么努力想必不会被月球上落败吧？」
+					PRINTFORMW 「和我的恋人在一起，想必可以学习你的勤劳精神，哦，也可以使他感受到你胸襟的宽广吧～」
+					HTML_PRINT "<font color='#ED0024'>「蓝！小心我治退你！」</font>"
+				ELSEIF TALENT : 1 : 恋慕
+				ELSE 
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 1 : 恋人
+				ELSEIF TALENT : 1 : 恋慕
+				ELSE 
+				ENDIF
+			ELSE 
+				IF TALENT : 1 : 恋人
+				ELSEIF TALENT : 1 : 恋慕
+				ELSE 
+				ENDIF
+			ENDIF
+	ELSEIF ARG : 1 == 15
+			IF TALENT:恋人
+				IF TALENT : 15 : 恋人
+					HTML_PRINT "<font color='#EAD830'>「下一个就是你了，八云蓝！」</font>"
+					PRINTFORMW 「野郎！PADio！」
+					HTML_PRINT "<font color='#EAD830'>「吼吼！竟然没有害怕的远离我，还在靠近我吗？」</font>"
+					HTML_PRINT "<font color='#EAD830'>「多亏了你和我的恋人%CALLNAME:MASTER%像是被刮了桃色之风的你先生拼命的睡觉一样拼命的告诉你我和%CALLNAME:MASTER%都会时停的秘密！」</font>"
+					PRINTFORMW 「不靠近你一点，怎么把你的pad打出来啊？又怎么和我的%CALLNAME:MASTER%接吻啊？」
+					HTML_PRINT "<font color='#EAD830'>「吼吼！那我们就不妨再靠近一点！」</font>"
+					PRINTFORMW 「欧拉！（猛的和%CALLNAME:MASTER%接吻）」
+					HTML_PRINT "<font color='#EAD830'>「木大！」</font>"
+					EXP:15:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					EXP:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					HTML_PRINT "<font color='#EAD830'>「太慢了太慢了！砸瓦路多噶，赛高no斯丹多哒！」</font>"
+					PRINTFORMW 「看来你的砸瓦鲁多和我都是同种类型的呢？都是强力的接吻，力量和速度都差不多啊！」
+					HTML_PRINT "<font color='#EAD830'>「虽然想要试验一下我的砸瓦鲁多时停接吻和你的狐妖接吻哪个更强大一点，嘛，但是已经没有实验的必要了。」</font>"
+					PRINTFORMW 「你说的没有必要了，指的是轻轻的在%CALLNAME:MASTER%的嘴上吻一下连拉丝都没有吗？可惜了我两万的吸引力啊？」
+					HTML_PRINT "<font color='#EAD830'>「（脸色一变）为什么八云家的人就是这么不服输呢？」</font>"
+					HTML_PRINT "<font color='#EAD830'>「哈，那我就接受你那无聊的挑战，再多陪你玩一下吧？（时停接吻）」</font>"
+					HTML_PRINT "<font color='#EAD830'>「嗯！嗯！嗯嗯嗯！木大木大木大！」</font>"
+					EXP:15:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					EXP:15:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					EXP:15:接吻経験 += 3
+					EXP:MASTER:接吻経験 += 3
+					PRINTFORMW 「欧拉！（猛吸）欧拉！（猛吸）欧拉欧拉欧拉（猛吸）！」
+					EXP:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					EXP:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					EXP:接吻経験 += 3
+					EXP:MASTER:接吻経験 += 3
+					HTML_PRINT "<font color='#EAD830'>「要比比速度吗？」</font>"
+					HTML_PRINT "<font color='#EAD830'>「木大木大木大！」</font>"
+					XP:15:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					PRINTFORMW 「欧拉欧拉欧拉！」
+					EXP:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+				ELSEIF TALENT : 15 : 恋慕
+					SELECTCASE RAND : 2
+					CASE 1
+						PRINTFORMW 「你就是十六夜咲夜吧？」
+						HTML_PRINT "<font color='#EAD830'>「这么说来，你就是八云蓝吧？」</font>"
+						PRINTFORMW 「大家都叫我lanlan，请你多多关照。啊！%CALLNAME:MASTER%！给你介绍一下，这个是我的恋人，名叫%CALLNAME:MASTER%。」
+						HTML_PRINT "<font color='#EAD830'>「哼（看向你）！啊～！（接吻）」</font>"
+						XP:15:接吻経験 += 1
+						EXP:MASTER:接吻経験 += 1
+						PRINTFORMW 「你在干什么！饶不了你！」
+						HTML_PRINT "<font color='#EAD830'>「和%CALLNAME:MASTER%接吻真是太舒服了！真是让我high到不行啊！」</font>"
+					CASE 2
+						PRINTFORMW 「PADio！你觉得恋人和恋慕哪个更好一点呢？（炫耀）」
+						HTML_PRINT "<font color='#EAD830'>「王有王的资质，厨师有厨师的资质，关系没有好坏之分（脸黑），这就是生存之道。」</font>"
+						PRINTFORMW 「可是现在%CALLNAME:MASTER%在和我约会啊，我想说一句，我现在遇到你真的太好了！」
+						PRINTFORMW 「帝王是我蓝哒！一直都没有改变！」
+					ENDSELECT
+				ELSE 
+					PRINTFORMW 「你好！（为什么那个红魔馆的女仆长在和我的恋人约会？）难道红魔馆要搞什么异变吧？」
+					HTML_PRINT "<font color='#EAD830'>「你果然上当了啊八云蓝！」</font>"
+					HTML_PRINT "<font color='#EAD830'>「和我咲夜玩智斗你还是嫩了点啊！」</font>"
+					PRINTFORMW 「啊！不会吧！现在在约会，不会是。。。」
+					HTML_PRINT "<font color='#EAD830'>「没错！我们红魔馆根本就没有搞什么异变！这就是我们的生存路线！」</font>"
+					PRINTFORMW 「野郎（反词正用表强调，突出蓝大人对红魔馆的赞美之意，表达了作者的思乡之情）！PADio（赞许意）！」
+					HTML_PRINT "<font color='#EAD830'>「太合适了！和你的恋人出门约会真是太合适了！哈哈哈哈哈！」</font>"
+				ENDIF
+			ELSEIF TALENT:恋慕
+				IF TALENT : 15 : 恋人
+					HTML_PRINT "<font color='#EAD830'>「老东西，你的魅惑最没用了！（有了%CALLNAME:MASTER%的骄傲）现在 和我是恋人，而你只是恋慕啊！」</font>"
+					HTML_PRINT "<font color='#EAD830'>「太慢了太慢了！我的恋人关系是和%CALLNAME:MASTER%最亲密的关系！无论是口上的触发，还是能干的事情，都要在你的恋慕之上！」</font>"
+					PRINTFORMW 「哼！话说PADio，你知道欧派是什么东西吗？」
+					HTML_PRINT "<font color='#EAD830'>「啊啊啊啊啊！这是怎么回事？我咲夜竟然想吐！你究竟说了些什么？」</font>"
+					PRINTFORMW 「有了pad之后，魅惑你的恋人只需要一秒钟不到！」
+					HTML_PRINT "<font color='#EAD830'>「（把%CALLNAME:MASTER%的手放到自己的欧派上）只要能到那个地方！只要能到那个地方！啊！（蓝大人把%CALLNAME:MASTER%的一只手放到了自己的欧派上）」</font>"
+					PRINTFORMW 「这里已经满员了，你已经逃不掉了。」
+				ELSEIF TALENT : 15 : 恋慕
+					HTML_PRINT "<font color='#EAD830'>「呦？你就是八云蓝吧？」</font>"
+					HTML_PRINT "<font color='#EAD830'>「我看你和%CALLNAME:MASTER%关系很好啊？」</font>"
+					HTML_PRINT "<font color='#EAD830'>「我就觉得很奇怪，为什么陪我的时间少了，我看最近%CALLNAME:MASTER%好像有在和别人约会，原来是和你啊？」</font>"
+					HTML_PRINT "<font color='#EAD830'>接下来咲夜突然一把抓住%CALLNAME:MASTER%，向他强吻过去。</font>"
+					XP:15:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					PRINTFORMW 「啊！做了！」
+					PRINTFORMW 「真不愧是咲夜！轻易的做到了我做不到的事！这真是令人佩服啊！」
+					HTML_PRINT "<font color='#EAD830'>「怎么？你和%CALLNAME:MASTER%接吻过了吗？」</font>"
+					HTML_PRINT "<font color='#EAD830'>「%CALLNAME:MASTER%的接吻对象不是你，而是我咲夜哒！」</font>"
+				ELSE 
+					PRINTFORMW 「你这个家伙！竟然和我恋慕的人在约会！你究竟和%CALLNAME:MASTER%约会了多少次！」
+					HTML_PRINT "<font color='#EAD830'>「你难道会记住你吃过多少片面包吗？」</font>"
+				ENDIF
+			ELSE 
+				IF TALENT : 15 : 恋人
+					PRINTFORMW 「两位的关系真是好啊？」
+					HTML_PRINT "<font color='#EAD830'>「人行横道不是很宽阔吗？%CALLNAME:MASTER%和我去那里散步！」</font>"
+				ELSEIF TALENT : 15 : 恋慕
+					HTML_PRINT "<font color='#EAD830'>「蓝大人，人类这种生物真是没用啊！」</font>"
+					PRINTFORMW 「嗯？」
+					HTML_PRINT "<font color='#EAD830'>「无论怎么工于计算，到最后都会表白，而这花费的时间太长了。必须要成为超越人类的存在啊！」</font>"
+					PRINTFORMW 「你究竟在说什么啊？」
+					HTML_PRINT "<font color='#EAD830'>「所以说蓝，我不做人了！我要强吻%CALLNAME:MASTER%！」</font>"
+					PRINTFORMW 「你为什么要抓住%CALLNAME:MASTER%？！」
+					HTML_PRINT "<font color='#EAD830'>「蓝！就让你看着！」</font>"
+					XP:15:接吻経験 += 1
+					EXP:MASTER:接吻経験 += 1
+					PRINTFORMW 「啊。。。%CALLNAME:MASTER%！」
+					HTML_PRINT "<font color='#EAD830'>「哈哈哈哈，哈哈哈哈哈哈！」</font>"
+					HTML_PRINT "<font color='#EAD830'>「哈哈哈哈哈哈哈哈哈哈哈哈哈哈！」</font>"
+				ELSE 
+				;实在没活了，就用迪亚哥代替一下吧
+					PRINTFORMW 「吾心所澄皆为明镜，所做皆为正义！你们俩真是绕了好大一圈啊。。。」
+					HTML_PRINT "<font color='#EAD830'>「红魔馆被炸的实在是没钱了！曼哈顿！我想要曼哈顿！」</font>"
+					PRINTFORMW 「上流的富吸血鬼！」
+				ENDIF
+			ENDIF
+	ELSE
+		IF TALENT:恋人
+			PRINTFORMW 「嗯？明明都有我了，竟然还和别的人一起约会？」
+			PRINTFORMW 「想必你既然敢这么做，那就一定做好了被狐狸榨干的觉悟吧？」
+			PRINTFORMW 「好好玩～我完全不生气哦～」
+		ELSEIF TALENT:恋慕
+			PRINTFORMW 「你在。。。约会？！」
+			PRINTFORMW 「不可能，不可能。。。」
+			PRINTFORMW （难道我晚了一步吗？）
+			PRINTFORMW （切！我是不可能输的！）
+			PRINTFORMW 「两位。。。好 好 玩 。。。」
+		ELSE 
+			PRINTFORMW 「好你个%CALLNAME:MASTER%！在和这么漂亮的孩子约会！真是有福气啊你！」
+			PRINTFORMW 「好好玩哦？」
+		ENDIF
+	ENDIF
+	PRINTFORML 
+	RETURN 1
+ENDIF
+RETURN 1
+	;-------------------------------------------------
+	;MAIN_MAP上で一日最初の挨拶
+	;注、このあと通常の遭遇口上、ARG==1 OR ARG==2に接続します
+	;記入チェック（=0, 非表示、1, 表示）
+	LOCAL:1 = 1
+	;-------------------------------------------------
+	IF LOCAL:1 && ARG == 8
+		IF FESTIVAL() == "情人節"
+		    IF TALENT:恋人
+              PRINTFORMW 「%CALLNAME:MASTER%桑！今天是。。。洋七夕节哦？紫大人告诉我叫做瓦伦特日哦？」
+              PRINTFORMDL 「呐呐呐，我给你准备了巧克力哦？你猜猜是什么味道的？」
+              PRINTFORML [0] 我猜是黑巧克力
+              PRINTFORML [1] 我猜是白巧克力
+              INPUT
+              IF RESULT == 0
+              PRINTFORMW 「%CALLNAME:MASTER%，有首古诗，身无彩凤双飞翼。。。」
+              PRINTFORMDL 心有灵犀一点通！蓝大人情人节快乐！
+              PRINTFORMDL 「宾果！呐呐呐？看到我的欧派中间了吗？」
+              PRINTFORMDL 你早就注意到蓝的胸前有形状不明的凸起，于是这是你从蓝热热的双峰之间取出了温热的巧克力
+              PRINTFORMW 「怎么样...%CALLNAME:MASTER%、这份情人节礼物、你喜欢吗...是本命的哦%UNICODE(0x2665) *1%」
+							PRINTFORMW 「张嘴（打开盒子，含住一颗巧克力）——」
+							PRINTFORMW 你向蓝大人吻去。巧克力在你的嘴里化开，你感受到了巧克力的可可香和奶香，好久才放开你
+							EXP:接吻経験 += 1
+							EXP:MASTER:接吻経験 += 1
+              SIF TALENT:母乳体質
+	           	PRINTFORMW 「%CALLNAME:MASTER%，做巧克力的奶，全都是从我的胸里面挤出来的%UNICODE(0x2665) *3%」
+							IF TCVAR:媚薬 || TCVAR:発情 || CFLAG:TARGET:积攒度 > 850
+								PRINTFORMW 你突然注意到狐狸的性欲疑似有点过强了，腰子在隐隐作痛。
+								PRINTFORMW 「%CALLNAME:MASTER%？您的回礼呢？」
+								PRINTFORMW 蓝大人！我准备回礼了！蓝大人，你脱衣服干什么？你不要过来啊！
+								PRINTFORMW 砸瓦鲁多！呐尼？！已经来不及了！
+								PRINTFORMW 呀没罗！wryyyyyyy！
+								PRINTFORMW 「别怕。。。我只是想要一点。。。白色的巧克力罢了。。。」
+								PRINTFORMW 「我没有吃饱的话，你就别想逃走哦？你的这个，也是本命的。。。」
+								EXP:MASTER:射精経験 += 2
+								EXP:MASTER:絶頂経験 += 1
+							ENDIF
+	          	ELSEIF RESULT == 1
+              PRINTFORMW 「...猜错了哦。不过没关系！」
+								IF TALENT:母乳体質
+									PRINTFORMW 蓝大人不知道从哪里找出来一个杯子，把几块巧克力放在杯子里。
+									PRINTFORMW 「你看，这样就变白了哦？」
+									PRINTFORMW 蓝大人把自己的奶挤到杯子里，皎洁的对你笑着。
+									PRINTFORMW 「嘿嘿！白色的巧克力哦？」
+									PRINTFORMW 「快喝了吧？」
+									BASE:MASTER:0 += 100
+									BASE:MASTER:1 += 100
+								ELSEIF TCVAR:媚薬 || TCVAR:発情 || CFLAG:TARGET:积攒度 > 850
+									PRINTFORMW 「你吃到的是黑色的，但我吃到的可就是白色的啦。」
+									PRINTFORMW 「其实，你身上就有能让巧克力变白色的液体哦？」
+									PRINTFORMW 蓝大人熟练的把你的裤子拉了下来。玩弄着你那被折磨了无数次的肉棒
+									PRINTFORMW 「这就是你猜错了的惩罚哦？」
+									EXP:MASTER:射精経験 += 2
+									EXP:MASTER:絶頂経験 += 1
+								ELSE
+									PRINTFORMW 「白色情人节的时候你再猜猜吧？」
+									PRINTFORMW 「诺，自己拿哦？」
+									PRINTFORMDL 你早就注意到蓝的胸前有形状不明的凸起，于是这是你从蓝热热的双峰之间取出了温热的巧克力
+            		  PRINTFORMW 「怎么样...%CALLNAME:MASTER%、这份情人节礼物、你喜欢吗...是本命的哦%UNICODE(0x2665) *1%」
+									PRINTFORMW 「张嘴（打开盒子，含住一颗巧克力）——」
+									PRINTFORMW 你向蓝大人吻去。巧克力在你的嘴里化开，你感受到了巧克力的可可香和奶香，好久才放开你
+									EXP:接吻経験 += 1
+									EXP:MASTER:接吻経験 += 1
+								ENDIF
+              ENDIF
+        ELSEIF TALENT:恋慕
+              PRINTFORMW 「%CALLNAME:MASTER%、猜猜今天是什么节日？」
+							PRINTFORMW 当然知道啦蓝大人！今天是情人节，我打算送巧克力去！
+								IF TALENT : 143 : 恋人 || TALENT : 143 : 恋慕
+									PRINTFORMW 「哼！诺？你给饕餮的那份我看看？这么精致啊！给她的那份，是本命的嘛～」
+									PRINTFORML [0] 其实蓝大人，我给你的这份才是本命的。。。
+              		PRINTFORML [1] 没错没错！毕竟我是饕餮的恋人嘛！
+									PRINTFORML [2] 哈哈。。。我的本命巧克力不是给饕餮的。。。是其他人的。。。
+              		INPUT
+              		IF RESULT == 0
+										PRINTFORMDL 「诶？诶诶诶诶？？？！！！」
+										PRINTFORMDL 你注意到蓝大人的脸红了起来，蓝大人像是蒸汽火车一样。
+										PRINTFORMDL 「那么，那么，我看看，我看看！」
+										PRINTFORMDL 「哇！我好喜欢！好喜欢！」
+										CFLAG:1:好感度 += 120
+     								CFLAG:1:信賴度 += 50
+										PRINTFORMDL 「谢谢你了哦？（本命巧克力不是饕餮的而是我的。。。啊啊啊啊好扭曲的情感，我有一点喜欢上了！）」
+									ELSEIF RESULT == 1
+										PRINTFORMDL 「啊。。。这样啊。。。」
+										PRINTFORMDL 「其实你给饕餮准备的巧克力有点少啦。而且他喜欢吃奶香味的黑巧克力哦？」
+										PRINTFORMDL （其实以前的奶是我提供的。。。现在不知道她的巧克力怎么样了啊。。。）
+										PRINTFORMDL 「那个。。。你去忙吧，血池地狱还是有点距离的，你加油！」
+										PRINTFORMDL 「我给饕餮的，也是本命巧克力啊。。。」
+									ELSEIF RESULT == 2
+										PRINTFORMDL 「哼！花心！」
+										PRINTFORMDL 「不过罢了吧，你能有喜欢的人就好！」
+										PRINTFORMDL 「也罢了，省的饕餮收到两份巧克力会有点欲望加速。。。」
+									ENDIF
+								ELSE
+									PRINTFORMDW 「你有给我的巧克力吗？」
+									PRINTFORML [0] 蓝大人！这里哦！本命的！
+              		PRINTFORML [1] 给亲爱的蓝大人的义理巧克力！
+									PRINTFORML [2] 我不知道怎么做巧克力。。。
+									INPUT
+              		IF RESULT == 0
+										PRINTFORMDL 「」
+									IF RESULT == 1
+									IF RESULT == 2
+									ENDIF
+								ENDIF 
+        ELSE
+              PRINTFORMW 「%CALLNAME:MASTER%、你知道今天是什么节日吗」 
+              PRINTFORMDL 面对龙突然的询问、你思考了一会、发现今天居然是情人节、那难不成......
+              PRINTFORMW 「嗯、就是想的那样、我给你做了点巧克力、收下吧」
+              PRINTFORMDL 接过龙手中的有着精美包装的巧克力、你的脑袋还是没从惊讶中恢复过来
+              PRINTFORMW 「呵呵、那么惊讶干嘛、我们之间的关系也比较近了吧、那送一点巧克力又有什么关系呢」
+              PRINTFORMW 「倒是%CALLNAME:MASTER%别忘了回礼的日子啊」
+        ENDIF
+		ELSEIF : 恋人
+			PRINTFORML 「洗漱过了吗？」
+			PRINTFORML 「哼哼~」
+			PRINTFORML 「来这边~坐在我的身边吧~」
+			PRINTFORMW 灵梦惬意的依靠在%CALLNAME:MASTER%肩旁
+		ELSEIF TALENT:恋慕
+			PRINTFORML 「今天有什么要费心去做的事情吗？」
+			PRINTFORML 「唔、那要一起喝茶吗？休息一下也没关系哦」
+			PRINTFORML 「时间还很早、多坐一会儿也可以的」
+			PRINTFORMW 灵梦微笑着递给你一杯茶
+		ELSEIF TALENT:思慕
+			PRINTFORML 「啊、%CALLNAME:MASTER%、起得挺早的嘛」
+			PRINTFORML 「洗漱过了吗？」
+			PRINTFORML 「唔、那要一起喝茶吗？」
+			PRINTFORMW 「嘛、反正时间还这么早、稍微呆一会儿也不错哦」
+		ELSE
+			PRINTFORML 「嗯、你好」
+			PRINTFORML 面对打招呼、灵梦只是轻轻颔首、没什么特别的行动
+			PRINTFORML 不亲近也不疏远、生性如此的巫女每天的生活就是扫扫院子喝喝茶
+			PRINTFORML 每一位来者都被这样对待、强大的妖怪没有异议、其他人也不会有异议
+			PRINTFORML 「你也没什么事做吗」
+			PRINTFORML 「要不要一起休息下、我正准备煮茶」
+			PRINTFORMW 这样的灵梦、也不错呢
+		ENDIF
+		PRINTFORML 
+		ENDIF
+		RETURN 1
+	ENDIF
